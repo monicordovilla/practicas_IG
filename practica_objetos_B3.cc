@@ -183,7 +183,7 @@ switch (toupper(Tecla1)){
         case 'O':t_objeto=OBJETO_PLY;break;	
         case 'R':t_objeto=ROTACION;break;
         case 'A':t_objeto=ARTICULADO;break;
-	case 'L':t_objeto=CERDITO;break;
+	case 'G':t_objeto=CERDITO;break;
 	}
 glutPostRedisplay();
 }
@@ -208,14 +208,52 @@ switch (Tecla1){
 	case GLUT_KEY_DOWN:Observer_angle_x++;break;
 	case GLUT_KEY_PAGE_UP:Observer_distance*=1.2;break;
 	case GLUT_KEY_PAGE_DOWN:Observer_distance/=1.2;break;
-        case GLUT_KEY_F1:tanque.giro_tubo+=1;
+        case GLUT_KEY_F1:
+		if(t_objeto==ARTICULADO){
+			tanque.giro_tubo+=1;
                          if (tanque.giro_tubo>tanque.giro_tubo_max) tanque.giro_tubo=tanque.giro_tubo_max;
-                         break;
-        case GLUT_KEY_F2:tanque.giro_tubo-=1;
+		}
+		else if(t_objeto==CERDITO){
+			cerdito.giro_pata+=1;
+                         if (cerdito.giro_pata > cerdito.giro_pata_max) cerdito.giro_pata=cerdito.giro_pata_max;
+		}
+                 break;
+        case GLUT_KEY_F2:
+		if(t_objeto==ARTICULADO){
+			tanque.giro_tubo-=1;
                          if (tanque.giro_tubo<tanque.giro_tubo_min) tanque.giro_tubo=tanque.giro_tubo_min;
-                         break;break;
-        case GLUT_KEY_F3:tanque.giro_torreta+=5;break;
-        case GLUT_KEY_F4:tanque.giro_torreta-=5;break;
+                         
+		}
+		else if(t_objeto==CERDITO){
+			cerdito.giro_pata-=1;
+                         if (cerdito.giro_pata < cerdito.giro_pata_min) cerdito.giro_pata=cerdito.giro_pata_min;
+		}
+		break;
+        case GLUT_KEY_F3:
+		if(t_objeto==ARTICULADO){
+			tanque.giro_torreta+=5;                         
+		}
+		else if(t_objeto==CERDITO){
+			if(cerdito.giro_saludo >= cerdito.giro_pata_max) cerdito.saludo_arriba = 0;
+			if(cerdito.giro_saludo <= cerdito.giro_pata_min) cerdito.saludo_arriba = 1;
+
+			if(cerdito.saludo_arriba == 0){
+				cerdito.giro_saludo-=1;
+			}			
+			else{
+				cerdito.giro_saludo+=1;
+			}
+		}
+		break;
+        case GLUT_KEY_F4:
+		if(t_objeto==ARTICULADO){
+			tanque.giro_torreta-=5;                         
+		}
+		else if(t_objeto==CERDITO){
+			cerdito.giro_cara-=1;
+                         if (cerdito.giro_cara < cerdito.giro_cara_min) cerdito.giro_cara=cerdito.giro_cara_min;
+		}
+		break;
 	}
 glutPostRedisplay();
 }
@@ -264,7 +302,7 @@ glViewport(0,0,Window_width,Window_high);
 
 int main(int argc, char **argv)
 {
-cerdito.draw(modo,0.5,0.7,0.2,0.3,0.6,0.3,2);
+
 
 // creación del objeto ply
 

@@ -23,6 +23,7 @@ int num_aux; //numero de puntos que tiene el perfil
 // tratamiento de los vértices
 num_aux=perfil.size();
 vertices.resize(num_aux*num);
+caras.clear();
 for (j=0; j<num; j++)
   {for (i=0; i<num_aux; i++)
      {
@@ -141,6 +142,13 @@ float profundo = 1.0;
 	cilindro.parametros(alto, ancho, num);
 }
 
+void _pata::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor)
+{
+	glPushMatrix();
+	cilindro.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+	glPopMatrix();
+}
+
 //*************************************************************************
 // Nariz
 // alto 1 ancho 1
@@ -148,11 +156,19 @@ float profundo = 1.0;
 
 _nariz::_nariz(){
 
-	float alto = 1.0;
-	float ancho = 0.5;
+	float alto = 0.5;
+	float ancho = 1.0;
 	int num = 6;
 	cilindro.parametros(alto, ancho, num);
 
+}
+
+void _nariz::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor)
+{
+	glPushMatrix();
+	glRotatef(90.0,1,0,0);
+	cilindro.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+	glPopMatrix();
 }
 
 //*************************************************************************
@@ -161,7 +177,19 @@ _nariz::_nariz(){
 //*************************************************************************
 
 _oreja::_oreja(){
-float altura = 1.0;
+	float alto = 2.0;
+	float ancho = 1.0;
+	piramide = _piramide(ancho , alto);
+}
+
+void _oreja::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor)
+{
+	glPushMatrix();
+	piramide.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+	glPopMatrix();
+}
+
+/*float altura = 1.0;
 float radio = 0.5;
 int num = 3;
 
@@ -171,6 +199,7 @@ _vertex3i cara_aux;
 
 // tratamiento de los vértices
 vertices.resize(num);
+caras.clear();
 for (j=0; j<num; j++){
       vertice_aux.x=radio*cos(2.0*M_PI*j/(1.0*num));
       vertice_aux.z=-radio*sin(2.0*M_PI*j/(1.0*num));
@@ -206,9 +235,7 @@ for (j=0; j<num; j++){
 		cara_aux._2=(j+1)%num;
 		caras.push_back(cara_aux);
 	}
-
-}
-
+*/
 //*************************************************************************
 // esfera
 // radio 2
@@ -305,8 +332,20 @@ void _cara::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, f
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(0, radio, radio);
+	glTranslatef(0, -(radio/2) , radio);
 	nariz.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef( -radio/2, radio/2 , 0);
+	glRotatef(45.0,0,0,1);
+	orejaIzq.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef( radio/2 , radio/2 , 0);
+	glRotatef(-45.0,0,0,1);
+	orejaDer.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
 }
 
@@ -322,7 +361,7 @@ _cuerpo::_cuerpo(){
 	radioP = 1.0;
 }
 
-void _cuerpo::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor)
+void _cuerpo::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor, float giro, float saludo)
 {
 	glPushMatrix();
 	abdomen.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
@@ -330,31 +369,55 @@ void _cuerpo::draw(_modo modo, float r1, float g1, float b1, float r2, float g2,
 
 	glPushMatrix();
 	glTranslatef(anchuraC/2+radioP/2,-alturaC/2,0);
-	glRotatef(90.0,0,0,1);
+	glRotatef(90.0+giro,0,0,1);
 	pataInfDer.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(-(anchuraC/2+radioP/2),-alturaC/2,0);
-	glRotatef(-90.0,0,0,1);
+	glRotatef(-90.0-giro,0,0,1);
 	pataInfIzq.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(anchuraC/2+radioP/2, (alturaC/2)-1 ,0);
+	glRotatef(90.0+giro+saludo,0,0,1);
+	pataSupDer.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(-(anchuraC/2+radioP/2), (alturaC/2)-1 ,0);
+	glRotatef(-90.0-giro,0,0,1);
+	pataSupIzq.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+	glPopMatrix();
+
 }
 //*************************************************************************
 // Cerdito
 //*************************************************************************
 
 _cerdito::_cerdito(){
+	giro_pata = 0.0;
+	giro_saludo = 0.0;
+	saludo_arriba = 1;
+	giro_pata_min = -8.0;
+	giro_pata_max = 8.0;
+
+	giro_cara = 0.0;
+	giro_cara_max = 45.0;
+	giro_cara_min = -45.0;
 }
 
 void _cerdito::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor)
 {
+
 	glPushMatrix();
-	cuerpo.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+	cuerpo.draw(modo, r1, g1, b1, r2, g2, b2, grosor, giro_pata, giro_saludo);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(0, 3.5, 0);
+	glRotatef(giro_cara,1,0,0);
 	cara.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
 }
