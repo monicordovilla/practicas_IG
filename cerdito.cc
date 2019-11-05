@@ -332,7 +332,8 @@ void _cara::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, f
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(0, -(radio/2) , radio);
+	glTranslatef(0, -(radio/2) , radio-(0.25));
+	glRotatef(25.0,1,0,0);
 	nariz.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
 
@@ -404,7 +405,7 @@ _cerdito::_cerdito(){
 	giro_pata_max = 8.0;
 
 	giro_cara = 0.0;
-	giro_cara_max = 45.0;
+	giro_cara_max = 15.0;
 	giro_cara_min = -45.0;
 }
 

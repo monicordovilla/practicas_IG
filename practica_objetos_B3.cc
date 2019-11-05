@@ -254,7 +254,20 @@ switch (Tecla1){
                          if (cerdito.giro_cara < cerdito.giro_cara_min) cerdito.giro_cara=cerdito.giro_cara_min;
 		}
 		break;
+	case GLUT_KEY_F5:
+		if(t_objeto==CERDITO){
+			cerdito.giro_cara+=1;
+                         if (cerdito.giro_cara > cerdito.giro_cara_max) cerdito.giro_cara=cerdito.giro_cara_max;
+		}
+		break;
+	case GLUT_KEY_F6:
+		if(t_objeto==CERDITO){
+			cerdito.giro_cara-=1;
+                         if (cerdito.giro_cara < cerdito.giro_cara_min) cerdito.giro_cara=cerdito.giro_cara_min;
+		}
+		break;
 	}
+	
 glutPostRedisplay();
 }
 
