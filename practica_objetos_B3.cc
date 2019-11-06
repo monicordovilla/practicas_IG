@@ -235,18 +235,18 @@ switch (Tecla1){
 		}
 		else if(t_objeto==CERDITO){
 			if(cerdito.saludo) cerdito.saludo = false;
-			else cerdito.saludo = false;
+			else cerdito.saludo = true;
 
 			float temp;
 			while(cerdito.saludo){
-				temp=cerdito.giro_pata;
-				for(float i=temp; i<cerdito.giro_pata_max; i+=0.1){
-					cerdito.giro_pata+=0.1;
+				temp=cerdito.giro_saludo;
+				for(float i=temp; i<cerdito.giro_pata_max; i+=0.01){
+					cerdito.giro_pata+=0.01;
 				}
 				
-				temp=cerdito.giro_pata;
-				for(float i=temp; i<cerdito.giro_pata_min; i-=0.1){
-					cerdito.giro_pata-=0.1;
+				temp=cerdito.giro_saludo;
+				for(float i=temp; i>cerdito.giro_pata_min; i-=0.01){
+					cerdito.giro_pata-=0.01;
 				}
 			}
 		}
