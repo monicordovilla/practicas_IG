@@ -400,7 +400,7 @@ void _cuerpo::draw(_modo modo, float r1, float g1, float b1, float r2, float g2,
 _cerdito::_cerdito(){
 	giro_pata = 0.0;
 	giro_saludo = 0.0;
-	saludo_arriba = 1;
+	saludo = false;
 	giro_pata_min = -8.0;
 	giro_pata_max = 8.0;
 

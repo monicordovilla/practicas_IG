@@ -140,13 +140,13 @@ public:
 //movimiento de las patas
 float giro_pata;
 float giro_saludo;
-int saludo_arriba;
+bool saludo;
 float giro_pata_min;
 float giro_pata_max;
 //movimiento de la cara
-float giro_cara = 0.0;
-float giro_cara_max = 45.0;
-float giro_cara_min = -45.0;
+float giro_cara;
+float giro_cara_max;
+float giro_cara_min;
 
 
        _cerdito();
