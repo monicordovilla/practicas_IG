@@ -114,7 +114,7 @@ class _cuerpo: public _triangulos3D
 {
 public:
        _cuerpo();
-void 	draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor, float giro, float saludo, float salto);
+void 	draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor, float giro, float saludo);
 
 float alturaC;
 float anchuraC;

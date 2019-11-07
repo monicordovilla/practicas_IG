@@ -238,17 +238,17 @@ switch (Tecla1){
 			else cerdito.saludo = true;
 
 			float temp;
-			while(cerdito.saludo){
+			//while(cerdito.saludo){
 				temp=cerdito.giro_saludo;
 				for(float i=temp; i<cerdito.giro_pata_max; i+=0.01){
-					cerdito.giro_pata+=0.01;
+					cerdito.giro_pata+=0.5;
 				}
 				
 				temp=cerdito.giro_saludo;
 				for(float i=temp; i>cerdito.giro_pata_min; i-=0.01){
-					cerdito.giro_pata-=0.01;
+					cerdito.giro_pata-=0.5;
 				}
-			}
+			//}
 		}
 		break;
         case GLUT_KEY_F4:
@@ -278,10 +278,10 @@ switch (Tecla1){
 			if(cerdito.salto <= cerdito.salto_min )	cerdito.saltando = true;
 
 			if(cerdito.saltando){
-				cerdito.salto += 0.1;
+				cerdito.salto += 0.5;
 			}
 			else{
-				cerdito.salto -= 0.1;
+				cerdito.salto -= 0.5;
 			}
 		}
 		break;
