@@ -272,6 +272,19 @@ switch (Tecla1){
                          if (cerdito.giro_cara < cerdito.giro_cara_min) cerdito.giro_cara=cerdito.giro_cara_min;
 		}
 		break;
+	case GLUT_KEY_F7:
+		if(t_objeto==CERDITO){
+			if(cerdito.salto >= cerdito.salto_max ) cerdito.saltando = false;
+			if(cerdito.salto <= cerdito.salto_min )	cerdito.saltando = true;
+
+			if(cerdito.saltando){
+				cerdito.salto += 0.1;
+			}
+			else{
+				cerdito.salto -= 0.1;
+			}
+		}
+		break;
 	}
 	
 glutPostRedisplay();

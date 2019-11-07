@@ -362,7 +362,7 @@ _cuerpo::_cuerpo(){
 	radioP = 1.0;
 }
 
-void _cuerpo::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor, float giro, float saludo)
+void _cuerpo::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor, float giro, float saludo, float salto)
 {
 	glPushMatrix();
 	abdomen.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
@@ -371,12 +371,14 @@ void _cuerpo::draw(_modo modo, float r1, float g1, float b1, float r2, float g2,
 	glPushMatrix();
 	glTranslatef(anchuraC/2+radioP/2,-alturaC/2,0);
 	glRotatef(90.0+giro,0,0,1);
+	glRotatef(salto,1,0,0);
 	pataInfDer.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(-(anchuraC/2+radioP/2),-alturaC/2,0);
 	glRotatef(-90.0-giro,0,0,1);
+	glRotatef(salto,1,0,0);
 	pataInfIzq.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
 
@@ -407,13 +409,19 @@ _cerdito::_cerdito(){
 	giro_cara = 0.0;
 	giro_cara_max = 15.0;
 	giro_cara_min = -45.0;
+
+	salto = 0.0;
+	salto_max = 25.0;
+	salto_min = 0.0;
+	saltando = true;
 }
 
 void _cerdito::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor)
 {
 
 	glPushMatrix();
-	cuerpo.draw(modo, r1, g1, b1, r2, g2, b2, grosor, giro_pata, giro_saludo);
+	glRotatef(salto,1,0,0);
+	cuerpo.draw(modo, r1, g1, b1, r2, g2, b2, grosor, giro_pata, giro_saludo, salto/2);
 	glPopMatrix();
 
 	glPushMatrix();

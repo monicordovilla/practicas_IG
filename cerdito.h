@@ -114,7 +114,7 @@ class _cuerpo: public _triangulos3D
 {
 public:
        _cuerpo();
-void 	draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor, float giro, float saludo);
+void 	draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor, float giro, float saludo, float salto);
 
 float alturaC;
 float anchuraC;
@@ -139,14 +139,20 @@ class _cerdito: public _triangulos3D
 public:
 //movimiento de las patas
 float giro_pata;
-float giro_saludo;
-bool saludo;
 float giro_pata_min;
 float giro_pata_max;
 //movimiento de la cara
 float giro_cara;
 float giro_cara_max;
 float giro_cara_min;
+//movimiento de salto
+float salto;
+float salto_max;
+float salto_min;
+bool saltando;
+//animacion
+float giro_saludo;
+bool saludo;
 
 
        _cerdito();
