@@ -369,26 +369,30 @@ void _cuerpo::draw(_modo modo, float r1, float g1, float b1, float r2, float g2,
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(anchuraC/2+radioP/2,-alturaC/2,0);
+	glTranslatef(anchuraC/3,-alturaC/2,0);
 	glRotatef(90.0+giro,0,0,1);
+         glTranslatef(0,-alturaP/2,0);
 	pataInfDer.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-(anchuraC/2+radioP/2),-alturaC/2,0);
+	glTranslatef(-anchuraC/3,-alturaC/2,0);
 	glRotatef(-90.0-giro,0,0,1);
+        glTranslatef(0,-alturaP/2,0);
 	pataInfIzq.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(anchuraC/2+radioP/2, (alturaC/2)-1 ,0);
+	glTranslatef(anchuraC/3, (alturaC/2)-1 ,0);
 	glRotatef(90.0+giro+saludo,0,0,1);
+        glTranslatef(0,-alturaP/2,0);
 	pataSupDer.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
 
 	glPushMatrix();
-	glTranslatef(-(anchuraC/2+radioP/2), (alturaC/2)-1 ,0);
+	glTranslatef(-anchuraC/3, (alturaC/2)-1 ,0);
 	glRotatef(-90.0-giro,0,0,1);
+        glTranslatef(0,-alturaP/2,0);
 	pataSupIzq.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
 

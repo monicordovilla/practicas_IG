@@ -27,6 +27,10 @@ GLfloat Size_x,Size_y,Front_plane,Back_plane;
 // variables que determninan la posicion y tamaño de la ventana X
 int Window_x=50,Window_y=50,Window_width=450,Window_high=450;
 
+//varibles de control del objeto articulado
+int flag=0;
+int seMueve = 0;
+
 
 // objetos
 _cubo cubo;
@@ -37,6 +41,7 @@ _tanque tanque;
 _cerdito cerdito;
 
 // _objeto_ply *ply1;
+void movimiento();
 
 
 //**************************************************************************
@@ -234,21 +239,9 @@ switch (Tecla1){
 			tanque.giro_torreta+=5;                         
 		}
 		else if(t_objeto==CERDITO){
-			if(cerdito.saludo) cerdito.saludo = false;
-			else cerdito.saludo = true;
-
-			float temp;
-			//while(cerdito.saludo){
-				temp=cerdito.giro_saludo;
-				for(float i=temp; i<cerdito.giro_pata_max; i+=0.01){
-					cerdito.giro_pata+=0.5;
-				}
-				
-				temp=cerdito.giro_saludo;
-				for(float i=temp; i>cerdito.giro_pata_min; i-=0.01){
-					cerdito.giro_pata-=0.5;
-				}
-			//}
+			//movimiento();
+			if(seMueve == 1) seMueve = 0;
+			if(seMueve == 0) seMueve = 1;
 		}
 		break;
         case GLUT_KEY_F4:
@@ -291,6 +284,48 @@ glutPostRedisplay();
 }
 
 
+//***************************************************************************
+// Funcion de movimiento de mi animacion
+//***************************************************************************
+/*
+void movimiento()
+{
+
+if(cerdito.saludo) cerdito.saludo = false;
+else cerdito.saludo = true;
+
+float temp;
+while(cerdito.saludo){
+	temp=cerdito.giro_saludo;
+	for(float i=temp; i<cerdito.giro_pata_max; i+=0.5){
+		cerdito.giro_saludo+=0.5;
+		glutPostRedisplay();
+	}
+				
+	temp=cerdito.giro_saludo;
+	for(float i=temp; i>cerdito.giro_pata_min; i-=0.5){
+		cerdito.giro_saludo-=0.5;
+		glutPostRedisplay();
+	}
+}
+
+}*/
+
+
+void automatico()
+{
+if(seMueve == 1){
+	if (flag==0) cerdito.giro_saludo+=0.5;
+	if (cerdito.giro_saludo>cerdito.giro_pata_max && flag==0)
+	  {cerdito.giro_saludo=cerdito.giro_pata_max;
+	   flag=1;}
+	if (flag==1) cerdito.giro_saludo-=0.5;
+	if (cerdito.giro_saludo<cerdito.giro_pata_min && flag==1)
+	  {cerdito.giro_saludo=cerdito.giro_pata_min;
+	   flag=0;}
+	glutPostRedisplay();
+}
+}
 
 //***************************************************************************
 // Funcion de incializacion
@@ -402,6 +437,8 @@ glutReshapeFunc(change_window_size);
 glutKeyboardFunc(normal_key);
 // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
 glutSpecialFunc(special_key);
+
+//glutIdleFunc(automatico);
 
 // funcion de inicialización
 initialize();
