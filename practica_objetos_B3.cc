@@ -41,7 +41,6 @@ _tanque tanque;
 _cerdito cerdito;
 
 // _objeto_ply *ply1;
-void movimiento();
 
 //**************************************************************************
 //
@@ -293,42 +292,26 @@ glutPostRedisplay();
 //***************************************************************************
 // Funcion de movimiento de mi animacion
 //***************************************************************************
-/*
-void movimiento()
-{
-steady_clock::now();
-if(cerdito.saludo) cerdito.saludo = false;
-else cerdito.saludo = true;
-
-float temp;
-while(cerdito.saludo){
-	temp=cerdito.giro_saludo;
-	for(float i=temp; i<cerdito.giro_pata_max; i+=0.5){
-		cerdito.giro_saludo+=0.5;
-		glutPostRedisplay();
-	}
-				
-	temp=cerdito.giro_saludo;
-	for(float i=temp; i>cerdito.giro_pata_min; i-=0.5){
-		cerdito.giro_saludo-=0.5;
-		glutPostRedisplay();
-	}
-}
-
-}*/
-
 
 void automatico()
 {
 	if(seMueve == 1){
+		//movimiento de subida del saludo
 		if (flag==0) cerdito.giro_saludo+=0.5;
-		if (cerdito.giro_saludo>cerdito.giro_pata_max && flag==0)
-		  {cerdito.giro_saludo=cerdito.giro_pata_max;
-		   flag=1;}
+		if ( (cerdito.giro_saludo + cerdito.giro_pata) > cerdito.giro_pata_max && flag==0 )
+			{
+				cerdito.giro_saludo=cerdito.giro_pata_max - cerdito.giro_pata; //Se resta el giro ya que la suma de ambas puede superar el maximo
+		   		flag=1;
+			}
+
+		//movimiento de bajada del saludo
 		if (flag==1) cerdito.giro_saludo-=0.5;
-		if (cerdito.giro_saludo<cerdito.giro_pata_min && flag==1)
-		  {cerdito.giro_saludo=cerdito.giro_pata_min;
-		   flag=0;}
+		if ( (cerdito.giro_saludo + cerdito.giro_pata) < cerdito.giro_pata_min && flag==1 )
+			{
+				cerdito.giro_saludo=cerdito.giro_pata_min - cerdito.giro_pata; //Se resta el giro ya que la suma de ambas puede superar el minimo
+				flag=0;
+			}
+
 		glutPostRedisplay();
 	}
 }
