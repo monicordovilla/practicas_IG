@@ -21,7 +21,7 @@ av pag - acercarse
 F1 - elevar tubo del tanque y eleva patas del cerdito
 F2 - bajar tubo del tanque y baja patas del cerdito
 F3 - girar torreta derecha del tanque y animacion del cerdito
-	esta animacion lo que hace es un movimiento de saludo al 
+	esta animacion lo que hace es un movimiento de saludo al pulsar y parar el movimiento si se vuelve a pulsar
 F4 - girar torreta izquierda y mueve la cabeza hacia arriba el cerdito
 F5 - mueve la cabeza hacia abajo el cerdito
 F6 - movimiento de salto del cerdito, cuerpo y cabeza hacia atras
