@@ -2,6 +2,7 @@
 
 //*************************************************************************
 // Cilindro
+// Se usa tanto para las patas como para la nariz
 //*************************************************************************
 _cilindro::_cilindro(){}
 
@@ -189,53 +190,6 @@ void _oreja::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, 
 	glPopMatrix();
 }
 
-/*float altura = 1.0;
-float radio = 0.5;
-int num = 3;
-
-int i,j;
-_vertex3f vertice_aux;
-_vertex3i cara_aux;
-
-// tratamiento de los vértices
-vertices.resize(num);
-caras.clear();
-for (j=0; j<num; j++){
-      vertice_aux.x=radio*cos(2.0*M_PI*j/(1.0*num));
-      vertice_aux.z=-radio*sin(2.0*M_PI*j/(1.0*num));
-      vertice_aux.y=0.0;
-      vertices[j]=vertice_aux;
-  }
-
-     
-	// tapa inferior
-	vertice_aux.x=0.0;  //Creamos un nuevo punto en mitad del eje, a la misma altura del primer punto del perfil
-	vertice_aux.y=0.0;
-	vertice_aux.z=0.0;
-	vertices.push_back(vertice_aux);
-
-	for(j=0; j<num; j++) //Y creamos caras que unen los puntos inferiores del perfil con nuestro nuevo punto central
-	{
-		cara_aux._0=vertices.size()-1;
-		cara_aux._1=j;
-		cara_aux._2=(j+1)%num;
-		caras.push_back(cara_aux);
-	}
-
-	// tapa superior
-	vertice_aux.x=0.0;
-	vertice_aux.y=altura;
-	vertice_aux.z=0.0;
-	vertices.push_back(vertice_aux);
-
-	for(j=0; j<num; j++)
-	{
-		cara_aux._0=vertices.size()-1;
-		cara_aux._1=j;
-		cara_aux._2=(j+1)%num;
-		caras.push_back(cara_aux);
-	}
-*/
 //*************************************************************************
 // esfera
 // radio 2
@@ -371,7 +325,7 @@ void _cuerpo::draw(_modo modo, float r1, float g1, float b1, float r2, float g2,
 	glPushMatrix();
 	glTranslatef(anchuraC/3,-alturaC/2,0);
 	glRotatef(90.0+giro,0,0,1);
-         glTranslatef(0,-alturaP/2,0);
+        glTranslatef(0,-alturaP/2,0);
 	pataInfDer.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
 
@@ -410,7 +364,7 @@ _cerdito::_cerdito(){
 
 	giro_cara = 0.0;
 	giro_cara_max = 15.0;
-	giro_cara_min = -45.0;
+	giro_cara_min = -25.0;
 
 	salto = 0.0;
 	salto_max = 25.0;

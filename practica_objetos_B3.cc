@@ -43,7 +43,6 @@ _cerdito cerdito;
 // _objeto_ply *ply1;
 void movimiento();
 
-
 //**************************************************************************
 //
 //***************************************************************************
@@ -220,7 +219,12 @@ switch (Tecla1){
 		}
 		else if(t_objeto==CERDITO){
 			cerdito.giro_pata+=1;
-                         if (cerdito.giro_pata > cerdito.giro_pata_max) cerdito.giro_pata=cerdito.giro_pata_max;
+				if (cerdito.giro_pata > cerdito.giro_pata_max){
+					cerdito.giro_pata=cerdito.giro_pata_max;
+					/*Quiero que continue desde el punto en el que saluda pero que no 
+					supere el angulo maximo y en este punto se coordine con los demas*/
+					cerdito.giro_saludo = 0; 
+				}
 		}
                  break;
         case GLUT_KEY_F2:
@@ -231,41 +235,43 @@ switch (Tecla1){
 		}
 		else if(t_objeto==CERDITO){
 			cerdito.giro_pata-=1;
-                         if (cerdito.giro_pata < cerdito.giro_pata_min) cerdito.giro_pata=cerdito.giro_pata_min;
+				if (cerdito.giro_pata < cerdito.giro_pata_min){
+					cerdito.giro_pata=cerdito.giro_pata_min;
+					/*Quiero que continue desde el punto en el que saluda pero que no 
+					supere el angulo minimo y en este punto se coordine con los demas*/
+					cerdito.giro_saludo = 0;
+				}
 		}
-		break;
+			break;
         case GLUT_KEY_F3:
 		if(t_objeto==ARTICULADO){
 			tanque.giro_torreta+=5;                         
 		}
 		else if(t_objeto==CERDITO){
-			//movimiento();
-			if(seMueve == 1) seMueve = 0;
+			/**INICIO ANIMACION**/
 			if(seMueve == 0) seMueve = 1;
+			else seMueve = 0;
+			
 		}
-		break;
+			break;
         case GLUT_KEY_F4:
 		if(t_objeto==ARTICULADO){
 			tanque.giro_torreta-=5;                         
 		}
 		else if(t_objeto==CERDITO){
 			cerdito.giro_cara-=1;
-                         if (cerdito.giro_cara < cerdito.giro_cara_min) cerdito.giro_cara=cerdito.giro_cara_min;
+			if (cerdito.giro_cara < cerdito.giro_cara_min)
+				cerdito.giro_cara=cerdito.giro_cara_min;
 		}
-		break;
-	case GLUT_KEY_F5:
+			break;
+		case GLUT_KEY_F5:
 		if(t_objeto==CERDITO){
 			cerdito.giro_cara+=1;
-                         if (cerdito.giro_cara > cerdito.giro_cara_max) cerdito.giro_cara=cerdito.giro_cara_max;
+			if (cerdito.giro_cara > cerdito.giro_cara_max)
+				cerdito.giro_cara=cerdito.giro_cara_max;
 		}
-		break;
-	case GLUT_KEY_F6:
-		if(t_objeto==CERDITO){
-			cerdito.giro_cara-=1;
-                         if (cerdito.giro_cara < cerdito.giro_cara_min) cerdito.giro_cara=cerdito.giro_cara_min;
-		}
-		break;
-	case GLUT_KEY_F7:
+			break;
+		case GLUT_KEY_F6:
 		if(t_objeto==CERDITO){
 			if(cerdito.salto >= cerdito.salto_max ) cerdito.saltando = false;
 			if(cerdito.salto <= cerdito.salto_min )	cerdito.saltando = true;
@@ -277,7 +283,7 @@ switch (Tecla1){
 				cerdito.salto -= 0.5;
 			}
 		}
-		break;
+			break;
 	}
 	
 glutPostRedisplay();
@@ -290,7 +296,7 @@ glutPostRedisplay();
 /*
 void movimiento()
 {
-
+steady_clock::now();
 if(cerdito.saludo) cerdito.saludo = false;
 else cerdito.saludo = true;
 
@@ -314,17 +320,17 @@ while(cerdito.saludo){
 
 void automatico()
 {
-if(seMueve == 1){
-	if (flag==0) cerdito.giro_saludo+=0.5;
-	if (cerdito.giro_saludo>cerdito.giro_pata_max && flag==0)
-	  {cerdito.giro_saludo=cerdito.giro_pata_max;
-	   flag=1;}
-	if (flag==1) cerdito.giro_saludo-=0.5;
-	if (cerdito.giro_saludo<cerdito.giro_pata_min && flag==1)
-	  {cerdito.giro_saludo=cerdito.giro_pata_min;
-	   flag=0;}
-	glutPostRedisplay();
-}
+	if(seMueve == 1){
+		if (flag==0) cerdito.giro_saludo+=0.5;
+		if (cerdito.giro_saludo>cerdito.giro_pata_max && flag==0)
+		  {cerdito.giro_saludo=cerdito.giro_pata_max;
+		   flag=1;}
+		if (flag==1) cerdito.giro_saludo-=0.5;
+		if (cerdito.giro_saludo<cerdito.giro_pata_min && flag==1)
+		  {cerdito.giro_saludo=cerdito.giro_pata_min;
+		   flag=0;}
+		glutPostRedisplay();
+	}
 }
 
 //***************************************************************************
@@ -438,7 +444,7 @@ glutKeyboardFunc(normal_key);
 // asignación de la funcion llamada "tecla_Especial" al evento correspondiente
 glutSpecialFunc(special_key);
 
-//glutIdleFunc(automatico);
+glutIdleFunc(automatico);
 
 // funcion de inicialización
 initialize();

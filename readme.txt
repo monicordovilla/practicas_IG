@@ -21,4 +21,6 @@ av pag - acercarse
 F1 - elevar tubo del tanque y eleva patas del cerdito
 F2 - bajar tubo del tanque y baja patas del cerdito
 F3 - girar torreta derecha del tanque y saluda el cerdito con la pata superior derecha
-F4 - girar torreta izquierda
+F4 - girar torreta izquierda y mueve la cabeza hacia arriba el cerdito
+F5 - mueve la cabeza hacia abajo el cerdito
+F6 - 
