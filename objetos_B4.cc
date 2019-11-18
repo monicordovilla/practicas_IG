@@ -114,6 +114,37 @@ glEnd();
 }
 
 //*************************************************************************
+// dibujar con iluminacion plana y sin suavizado
+//*************************************************************************
+
+void _triangulos3D::draw_iluminacion_plana()
+{
+int i;
+GLfloat ambient_component[4]={1,1,1,1};
+
+if(b_normales_caras == false) calcular_normales_caras();
+
+glShadeModel(GL_FLAT);
+glEnable(GL_LIGHTING);
+glEnable(GL_NORMALIZE);
+
+glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT_AND_DIFFUSE, (GLfloat *) &ambiente_difusa);
+glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR, (GLfloat *) &especular);
+glMaterialfv(GL_FRONT_AND_BACK,GL_SHININESS, (GLfloat *) &brillo);
+
+glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+	glBegin(GL_TRIANGLES);
+	for (unsigned int i=0 ; i < caras.size() ; i++){
+		glNormal3fv((GLfloat*) &normales_caras[i]);
+		glVertex3fv((GLfloat*) &vertices[caras[i]._0]);
+		glVertex3fv((GLfloat*) &vertices[caras[i]._1]);
+		glVertex3fv((GLfloat*) &vertices[caras[i]._2]);
+	}
+	glEnd();
+	glDisable(GL_LIGHTING);
+}
+
+//*************************************************************************
 // dibujar con distintos modos
 //*************************************************************************
 
@@ -125,6 +156,41 @@ switch (modo){
 	case SOLID_CHESS:draw_solido_ajedrez(r1, g1, b1, r2, g2, b2);break;
 	case SOLID:draw_solido(r1, g1, b1);break;
 	}
+}
+
+//*************************************************************************
+// calculo de normales (caras)
+//*************************************************************************
+
+void _triangulos3D::calcular_normales_caras()
+{
+normales_caras.resize(caras.size());
+
+for(unsigned long i=0; i<caras.size(); i++){
+	//obtener 2 vectores en el triángulo y calcular el producto vectorial
+	_vertex3f
+	a1=vertices[caras[i]._1]-vertices[caras[i]._0],
+	a2=vertices[caras[i]._2]-vertices[caras[i]._0],
+	n=a1.cross_product(a2);
+	//modulo
+	float m=sqrt(n.x*n.x*+n.y*n.y+n.z*n.z);
+	//normalizacion
+	normales_caras[i]=_vertex3f(n.x/m, n.y/m, n.z/m);
+
+}//fin for
+	b_normales_caras=true;
+}
+
+
+//*************************************************************************
+// calculo de normales (vertices)
+//*************************************************************************
+
+void _triangulos3D::calcular_normales_vertices()
+{
+
+
+	b_normales_vertices=true;
 }
 
 //*************************************************************************
