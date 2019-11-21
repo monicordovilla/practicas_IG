@@ -119,9 +119,9 @@ void draw_objects()
 switch (t_objeto){
 	case CUBO: cubo.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
 	case PIRAMIDE: piramide.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
-    case OBJETO_PLY: ply.draw(modo,1.0,0.6,0.0,0.0,1.0,0.3,2);break;
-    case ROTACION: rotacion.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
-    case ARTICULADO: tanque.draw(modo,0.5,0.7,0.2,0.3,0.6,0.3,2);break;
+	case OBJETO_PLY: ply.draw(modo,1.0,0.6,0.0,0.0,1.0,0.3,2);break;
+	case ROTACION: rotacion.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
+	case ARTICULADO: tanque.draw(modo,0.5,0.7,0.2,0.3,0.6,0.3,2);break;
 	case CERDITO: cerdito.draw(modo, 0.737255,0.560784,0.737255, 1.0,0.0,1.0, 2);break;
 	}
 
@@ -135,11 +135,11 @@ switch (t_objeto){
 void luces(float alfa)
 {
 
-GLfloat light1_position[4] = {20,20,0,1},
+GLfloat light1_position[4] = {20,20,0,0},
 	light1_ambient[4] = {0.1,0.0,0.0,1.0},
 	light1_intensity[4] = {0.9,0.9,0.9,1};
 
-glEnable(GL_LIGHT0);
+glEnable(GL_LIGHT1);
 
 glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
 glLightfv(GL_LIGHT1, GL_AMBIENT, light1_ambient);
@@ -149,7 +149,7 @@ glLightfv(GL_LIGHT1, GL_SPECULAR, light1_intensity);
 glMatrixMode(GL_MODELVIEW);
 glPushMatrix();
 glLoadIdentity();
-glRotatef(alfa,0,1,0);
+glRotatef(alfa,0,0,1);
 glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
 glPopMatrix();
 }
@@ -164,6 +164,7 @@ void draw(void)
 clean_window();
 change_observer();
 luces(60);
+//iniciar texturas
 draw_axis();
 draw_objects();
 glutSwapBuffers();
@@ -208,6 +209,7 @@ switch (toupper(Tecla1)){
 	case '2':modo=EDGES;break;
 	case '3':modo=SOLID;break;
 	case '4':modo=SOLID_CHESS;break;
+	case '5':modo=SOLID_ILLUMINATED_FLAT;break;
     case 'P':t_objeto=PIRAMIDE;break;
     case 'C':t_objeto=CUBO;break;
     case 'O':t_objeto=OBJETO_PLY;break;	

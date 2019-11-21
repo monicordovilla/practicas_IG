@@ -121,8 +121,12 @@ void _triangulos3D::draw_iluminacion_plana()
 {
 int i;
 GLfloat ambient_component[4]={1,1,1,1};
+ambiente_difusa._0 = 1;
+especular._0 = 1;
+brillo = 1;
 
 if(b_normales_caras == false) calcular_normales_caras();
+if(b_normales_vertices == false) calcular_normales_vertices();
 
 glShadeModel(GL_FLAT);
 glEnable(GL_LIGHTING);
@@ -155,43 +159,71 @@ switch (modo){
 	case EDGES:draw_aristas(r1, g1, b1, grosor);break;
 	case SOLID_CHESS:draw_solido_ajedrez(r1, g1, b1, r2, g2, b2);break;
 	case SOLID:draw_solido(r1, g1, b1);break;
+	case SOLID_ILLUMINATED_FLAT:draw_iluminacion_plana();
 	}
 }
 
 //*************************************************************************
 // calculo de normales (caras)
+// Dados los puntos P0, P1 y P2 podemos calcular los vectores A = P1-P0 y B = P2-P0
+// Si aplicamos el producto vectorial AxB obtenemos el vector normal N (sentido mano derecha)
 //*************************************************************************
 
 void _triangulos3D::calcular_normales_caras()
 {
-normales_caras.resize(caras.size());
+	normales_caras.resize(caras.size());
+	_vertex3f a1, a2;
+	for(unsigned long i=0; i<caras.size(); i++){
+		//obtener 2 vectores en el triángulo y calcular el producto vectorial
+		_vertex3f
+		a1=vertices[caras[i]._1]-vertices[caras[i]._0],
+		a2=vertices[caras[i]._2]-vertices[caras[i]._0],
+		n=a1.cross_product(a2);
+		//modulo
+		float m=sqrt(n.x*n.x*+n.y*n.y+n.z*n.z);
+		//normalizacion
+		normales_caras[i]=_vertex3f(n.x/m, n.y/m, n.z/m);
 
-for(unsigned long i=0; i<caras.size(); i++){
-	//obtener 2 vectores en el triángulo y calcular el producto vectorial
-	_vertex3f
-	a1=vertices[caras[i]._1]-vertices[caras[i]._0],
-	a2=vertices[caras[i]._2]-vertices[caras[i]._0],
-	n=a1.cross_product(a2);
-	//modulo
-	float m=sqrt(n.x*n.x*+n.y*n.y+n.z*n.z);
-	//normalizacion
-	normales_caras[i]=_vertex3f(n.x/m, n.y/m, n.z/m);
-
-}//fin for
+	}//fin for
+	
 	b_normales_caras=true;
 }
 
 
 //*************************************************************************
 // calculo de normales (vertices)
+// Formula pagina 25
+// Se parte de las normales de los triangulos que confluyen en dicho vertice y se calcula el valor medio
 //*************************************************************************
 
 void _triangulos3D::calcular_normales_vertices()
 {
+//modulo
+float m=vertices.size();
+
+	if(b_normales_vertices == false){
+
+		//si las normales de las caras no estan creadas crearlas
+		if (b_normales_caras==false) calcular_normales_caras();
+
+		normales_vertices.resize(vertices.size());
+
+		for(unsigned long i=0; i<caras.size(); i++){
+			normales_vertices[caras[i]._0] += normales_caras[i];
+			normales_vertices[caras[i]._1] += normales_caras[i];
+			normales_vertices[caras[i]._2] += normales_caras[i];
+		}
+
+		for(unsigned long i=0; i<vertices.size(); i++){
+			
+			normales_vertices[i] = (normales_vertices[i].normalize());
+		}
+
+		b_normales_vertices=true;
+	}//fin if
+}//fin funcion
 
 
-	b_normales_vertices=true;
-}
 
 //*************************************************************************
 // clase cubo

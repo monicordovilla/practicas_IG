@@ -3,6 +3,9 @@ acciones de las teclas
 2 - modo aristas
 3 - relleno solido
 4 - relleno ajedrez
+5 - iluminación sombreado plano
+6 - textura
+
 P - piramide cuadrangular
 C - cubo
 O - busto Beethoven	
