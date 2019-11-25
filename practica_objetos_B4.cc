@@ -135,7 +135,7 @@ switch (t_objeto){
 void luces(float alfa)
 {
 
-GLfloat light1_position[4] = {20,20,0,0},
+GLfloat light1_position[4] = {20,20,0,1},
 	light1_ambient[4] = {0.1,0.0,0.0,1.0},
 	light1_intensity[4] = {0.9,0.9,0.9,1};
 
@@ -210,11 +210,12 @@ switch (toupper(Tecla1)){
 	case '3':modo=SOLID;break;
 	case '4':modo=SOLID_CHESS;break;
 	case '5':modo=SOLID_ILLUMINATED_FLAT;break;
-    case 'P':t_objeto=PIRAMIDE;break;
-    case 'C':t_objeto=CUBO;break;
-    case 'O':t_objeto=OBJETO_PLY;break;	
-    case 'R':t_objeto=ROTACION;break;
-    case 'A':t_objeto=ARTICULADO;break;
+	case '6':modo=SOLID_ILLUMINATED_GOURAUD;break;
+	case 'P':t_objeto=PIRAMIDE;break;
+	case 'C':t_objeto=CUBO;break;
+	case 'O':t_objeto=OBJETO_PLY;break;	
+	case 'R':t_objeto=ROTACION;break;
+	case 'A':t_objeto=ARTICULADO;break;
 	case 'G':t_objeto=CERDITO;break;
 	}
 glutPostRedisplay();

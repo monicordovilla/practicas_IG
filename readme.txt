@@ -4,7 +4,7 @@ acciones de las teclas
 3 - relleno solido
 4 - relleno ajedrez
 5 - iluminación sombreado plano
-6 - textura
+6 - iluminación sombreado suave
 
 P - piramide cuadrangular
 C - cubo
