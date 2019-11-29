@@ -8,6 +8,7 @@ acciones de las teclas
 
 P - piramide cuadrangular
 C - cubo
+E - esfera
 O - busto Beethoven	
 R - peon
 A - tanque profesor

@@ -1,5 +1,5 @@
 //**************************************************************************
-// Práctica IG usando objetos
+// Prï¿½ctica IG usando objetos
 //**************************************************************************
 
 #include <vector>
@@ -22,7 +22,7 @@ class _puntos3D
 {
 public:
 
-  
+
 	_puntos3D();
 void 	draw_puntos(float r, float g, float b, int grosor);
 
@@ -30,7 +30,7 @@ vector<_vertex3f> vertices;
 };
 
 //*************************************************************************
-// clase triángulo
+// clase triï¿½ngulo
 //*************************************************************************
 
 class _triangulos3D: public _puntos3D
@@ -59,7 +59,7 @@ bool b_normales_vertices;
 
 _vertex4f ambiente_difusa;     //coeficientes ambiente y difuso
 _vertex4f especular;           //coeficiente especular
-float brillo;                  //exponente del brillo 
+float brillo;                  //exponente del brillo
 
 };
 
@@ -99,8 +99,37 @@ public:
 int   parametros(char *archivo);
 };
 
+
 //************************************************************************
-// objeto por revolución
+// objeto por revoluciÃ³n(cilindro)
+//************************************************************************
+
+class _cilindro_tapas: public _triangulos3D
+{
+public:
+       _cilindro_tapas();
+void  parametros(int num1);
+
+vector<_vertex3f> perfil;
+int num;
+};
+
+//************************************************************************
+// clase cono
+//************************************************************************
+
+class _cono: public _triangulos3D
+{
+public:
+       _cono();
+void  parametros(int num1, float altura, float radio);
+
+vector<_vertex3f> perfil;
+int num;
+};
+
+//************************************************************************
+// objeto por revoluciï¿½n
 //************************************************************************
 
 class _rotacion: public _triangulos3D
@@ -109,7 +138,7 @@ public:
        _rotacion();
 void  parametros(vector<_vertex3f> perfil1, int num1, int tapas);
 
-vector<_vertex3f> perfil; 
+vector<_vertex3f> perfil;
 int num;
 };
 
@@ -156,7 +185,7 @@ public:
 void 	draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
 
 protected:
-_rotacion tubo_abierto; // caña del cañón
+_rotacion tubo_abierto; // caï¿½a del caï¿½ï¿½n
 };
 
 //************************************************************************

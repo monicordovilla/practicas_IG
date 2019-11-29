@@ -12,7 +12,7 @@
 using namespace std;
 
 // tipos
-typedef enum{CUBO, PIRAMIDE, OBJETO_PLY, ROTACION, ARTICULADO, CERDITO} _tipo_objeto;
+typedef enum{CUBO, PIRAMIDE, OBJETO_PLY, ROTACION, ARTICULADO, CERDITO, ESFERA} _tipo_objeto;
 _tipo_objeto t_objeto=CUBO;
 _modo   modo=POINTS;
 
@@ -35,11 +35,11 @@ int seMueve = 0;
 // objetos
 _cubo cubo;
 _piramide piramide(0.85,1.3);
-_objeto_ply  ply; 
-_rotacion rotacion; 
+_objeto_ply  ply;
+_rotacion rotacion;
 _tanque tanque;
 _cerdito cerdito;
-
+_esfera esfera;
 // _objeto_ply *ply1;
 
 //**************************************************************************
@@ -89,7 +89,7 @@ glRotatef(Observer_angle_y,0,1,0);
 
 void draw_axis()
 {
-	
+
 glDisable(GL_LIGHTING);
 glLineWidth(2);
 glBegin(GL_LINES);
@@ -123,21 +123,44 @@ switch (t_objeto){
 	case ROTACION: rotacion.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
 	case ARTICULADO: tanque.draw(modo,0.5,0.7,0.2,0.3,0.6,0.3,2);break;
 	case CERDITO: cerdito.draw(modo, 0.737255,0.560784,0.737255, 1.0,0.0,1.0, 2);break;
+	case ESFERA: esfera.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
 	}
 
 }
 
 
 //**************************************************************************
-//
+//luces
 //***************************************************************************
 
 void luces(float alfa)
 {
 
+GLfloat light0_position[4] = {20,20,0,1},
+	light0_ambient[4] = {0.1,0.0,0.0,1.0},
+	light0_intensity[4] = {0.9,0.9,0.9,1};
+
+glEnable(GL_LIGHT0);
+
+glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
+glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_intensity);
+glLightfv(GL_LIGHT0, GL_SPECULAR, light0_intensity);
+
+glMatrixMode(GL_MODELVIEW);
+glPushMatrix();
+glLoadIdentity();
+glRotatef(alfa,0,0,1);
+glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+glPopMatrix();
+}
+
+void luces_animacion(float alfa)
+{
+
 GLfloat light1_position[4] = {20,20,0,1},
-	light1_ambient[4] = {0.1,0.0,0.0,1.0},
-	light1_intensity[4] = {0.9,0.9,0.9,1};
+	light1_ambient[4] = {0.5,0.0,0.0,1.0},
+	light1_intensity[4] = {1,0.9,0.9,0.8};
 
 glEnable(GL_LIGHT1);
 
@@ -149,6 +172,7 @@ glLightfv(GL_LIGHT1, GL_SPECULAR, light1_intensity);
 glMatrixMode(GL_MODELVIEW);
 glPushMatrix();
 glLoadIdentity();
+glTranslatef(5,0,0);
 glRotatef(alfa,0,0,1);
 glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
 glPopMatrix();
@@ -213,10 +237,11 @@ switch (toupper(Tecla1)){
 	case '6':modo=SOLID_ILLUMINATED_GOURAUD;break;
 	case 'P':t_objeto=PIRAMIDE;break;
 	case 'C':t_objeto=CUBO;break;
-	case 'O':t_objeto=OBJETO_PLY;break;	
+	case 'O':t_objeto=OBJETO_PLY;break;
 	case 'R':t_objeto=ROTACION;break;
 	case 'A':t_objeto=ARTICULADO;break;
 	case 'G':t_objeto=CERDITO;break;
+	case 'E':t_objeto=ESFERA;break;
 	}
 glutPostRedisplay();
 }
@@ -250,9 +275,9 @@ switch (Tecla1){
 			cerdito.giro_pata+=1;
 				if (cerdito.giro_pata > cerdito.giro_pata_max){
 					cerdito.giro_pata=cerdito.giro_pata_max;
-					/*Quiero que continue desde el punto en el que saluda pero que no 
+					/*Quiero que continue desde el punto en el que saluda pero que no
 					supere el angulo maximo y en este punto se coordine con los demas*/
-					cerdito.giro_saludo = 0; 
+					cerdito.giro_saludo = 0;
 				}
 		}
                  break;
@@ -260,13 +285,13 @@ switch (Tecla1){
 		if(t_objeto==ARTICULADO){
 			tanque.giro_tubo-=1;
                          if (tanque.giro_tubo<tanque.giro_tubo_min) tanque.giro_tubo=tanque.giro_tubo_min;
-                         
+
 		}
 		else if(t_objeto==CERDITO){
 			cerdito.giro_pata-=1;
 				if (cerdito.giro_pata < cerdito.giro_pata_min){
 					cerdito.giro_pata=cerdito.giro_pata_min;
-					/*Quiero que continue desde el punto en el que saluda pero que no 
+					/*Quiero que continue desde el punto en el que saluda pero que no
 					supere el angulo minimo y en este punto se coordine con los demas*/
 					cerdito.giro_saludo = 0;
 				}
@@ -274,18 +299,18 @@ switch (Tecla1){
 			break;
         case GLUT_KEY_F3:
 		if(t_objeto==ARTICULADO){
-			tanque.giro_torreta+=5;                         
+			tanque.giro_torreta+=5;
 		}
 		else if(t_objeto==CERDITO){
 			/**INICIO ANIMACION**/
 			if(seMueve == 0) seMueve = 1;
 			else seMueve = 0;
-			
+
 		}
 			break;
         case GLUT_KEY_F4:
 		if(t_objeto==ARTICULADO){
-			tanque.giro_torreta-=5;                         
+			tanque.giro_torreta-=5;
 		}
 		else if(t_objeto==CERDITO){
 			cerdito.giro_cara-=1;
@@ -314,7 +339,7 @@ switch (Tecla1){
 		}
 			break;
 	}
-	
+
 glutPostRedisplay();
 }
 
@@ -322,7 +347,8 @@ glutPostRedisplay();
 //***************************************************************************
 // Funcion de movimiento de mi animacion
 //***************************************************************************
-
+float angulo_luz = 60.0;
+float incremento = 10.0;
 void automatico()
 {
 	if(seMueve == 1){
@@ -341,6 +367,9 @@ void automatico()
 				cerdito.giro_saludo=cerdito.giro_pata_min - cerdito.giro_pata; //Se resta el giro ya que la suma de ambas puede superar el minimo
 				flag=0;
 			}
+
+		angulo_luz = fmod(angulo_luz + incremento , (float)360);
+		luces_animacion(angulo_luz);
 
 		glutPostRedisplay();
 	}
@@ -395,7 +424,7 @@ int main(int argc, char **argv)
 ply.parametros(argv[1]);
 
 
-// perfil 
+// perfil
 
 vector<_vertex3f> perfil2;
 _vertex3f aux;
@@ -446,7 +475,7 @@ glutInitWindowSize(Window_width,Window_high);
 
 // llamada para crear la ventana, indicando el titulo (no se visualiza hasta que se llama
 // al bucle de eventos)
-glutCreateWindow("PRACTICA - 3");
+glutCreateWindow("PRACTICA - 4");
 
 // asignación de la funcion llamada "dibujar" al evento de dibujo
 glutDisplayFunc(draw);

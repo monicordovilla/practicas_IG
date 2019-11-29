@@ -377,6 +377,160 @@ return(0);
 }
 
 
+
+//************************************************************************
+// objeto por revolucion(cilindro)
+//************************************************************************
+
+_cilindro_tapas::_cilindro_tapas()
+{
+
+}
+
+
+void _cilindro_tapas::parametros(int num)
+{
+
+  // perfil cilindro(rotacion)
+  vector<_vertex3f> perfil;
+  _vertex3f aux;
+
+  aux.x=1.0; aux.y=-1.0; aux.z=0.0;
+  perfil.push_back(aux);
+  aux.x=1.0; aux.y=1.0; aux.z=0.0;
+  perfil.push_back(aux);
+
+
+int i,j;
+_vertex3f vertice_aux;
+_vertex3i cara_aux;
+int num_aux; //numero de puntos que tiene el perfil
+
+// tratamiento de los vértices
+
+num_aux=perfil.size();
+vertices.resize(num_aux*num);
+for (j=0; j<num; j++)
+  {for (i=0; i<num_aux; i++)
+     {
+      vertice_aux.x=perfil[i].x*cos(2.0*M_PI*j/(1.0*num))+
+                    perfil[i].z*sin(2.0*M_PI*j/(1.0*num));
+      vertice_aux.z=-perfil[i].x*sin(2.0*M_PI*j/(1.0*num))+
+                    perfil[i].z*cos(2.0*M_PI*j/(1.0*num));
+      vertice_aux.y=perfil[i].y;
+      vertices[i+j*num_aux]=vertice_aux;
+     }
+  }
+
+// tratamiento de las caras j=perfiles i=puntos
+for(j=0; j<num; j++)
+{for (i=0;i<num_aux-1;i++)
+     {
+		cara_aux._0=i + ((j+1)%num)*num_aux;
+		cara_aux._1=i + 1 + ((j+1)%num)*num_aux;
+		cara_aux._2=i + 1 + j*num_aux;
+		caras.push_back(cara_aux);
+
+		cara_aux._0=i + 1 + j*num_aux;
+		cara_aux._1=i + j*num_aux;
+		cara_aux._2=i + ((j+1)%num)*num_aux;
+		caras.push_back(cara_aux);
+	}
+}
+
+ // tapa inferior
+if (fabs(perfil[0].x)>0.0) //Si el objeto de revolucion empieza fuera del eje
+  {
+	vertice_aux.x=0.0;  //Creamos un nuevo punto en mitad del eje, a la misma altura del primer punto del perfil
+	vertice_aux.y=perfil[0].y;
+	vertice_aux.z=0.0;
+	vertices.push_back(vertice_aux);
+
+	for(j=0; j<num; j++) //Y creamos caras que unen los puntos inferiores del perfil con nuestro nuevo punto central
+	{
+		cara_aux._0=vertices.size()-1;
+		cara_aux._1=j*num_aux;
+		cara_aux._2=((j+1)%num)*num_aux;
+		caras.push_back(cara_aux);
+	}
+  }
+
+ // tapa superior
+ if (fabs(perfil[num_aux-1].x)>0.0)
+  {
+	vertice_aux.x=0.0;
+	vertice_aux.y=perfil[num_aux-1].y;
+	vertice_aux.z=0.0;
+	vertices.push_back(vertice_aux);
+
+	for(j=0; j<num; j++)
+	{
+		cara_aux._0=vertices.size()-1;
+		cara_aux._1=j*num_aux+num_aux-1;
+		cara_aux._2=((j+1)%num)*num_aux+num_aux-1;
+		caras.push_back(cara_aux);
+	}
+  }
+}
+
+//************************************************************************
+// clase cono
+//************************************************************************
+
+_cono::_cono()
+{
+	_rotacion();
+}
+
+
+void _cono::parametros(int num, float altura, float radio)
+{
+//perfil cono
+
+
+int i,j;
+_vertex3f vertice_aux;
+_vertex3i cara_aux;
+
+// tratamiento de los vértices
+vertices.resize(num);
+for (j=0; j<num; j++){
+      vertice_aux.x=radio*cos(2.0*M_PI*j/(1.0*num));
+      vertice_aux.z=-radio*sin(2.0*M_PI*j/(1.0*num));
+      vertice_aux.y=0.0;
+      vertices[j]=vertice_aux;
+  }
+
+
+	// tapa inferior
+	vertice_aux.x=0.0;  //Creamos un nuevo punto en mitad del eje, a la misma altura del primer punto del perfil
+	vertice_aux.y=0.0;
+	vertice_aux.z=0.0;
+	vertices.push_back(vertice_aux);
+
+	for(j=0; j<num; j++) //Y creamos caras que unen los puntos inferiores del perfil con nuestro nuevo punto central
+	{
+		cara_aux._0=vertices.size()-1;
+		cara_aux._1=j;
+		cara_aux._2=(j+1)%num;
+		caras.push_back(cara_aux);
+	}
+
+	// tapa superior
+	vertice_aux.x=0.0;
+	vertice_aux.y=altura;
+	vertice_aux.z=0.0;
+	vertices.push_back(vertice_aux);
+
+	for(j=0; j<num; j++)
+	{
+		cara_aux._0=vertices.size()-1;
+		cara_aux._1=j;
+		cara_aux._2=(j+1)%num;
+		caras.push_back(cara_aux);
+	}
+}
+
 //************************************************************************
 // objeto por revolucion
 //************************************************************************
