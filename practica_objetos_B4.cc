@@ -188,7 +188,6 @@ void draw(void)
 clean_window();
 change_observer();
 luces(60);
-//iniciar texturas
 draw_axis();
 draw_objects();
 glutSwapBuffers();
@@ -301,7 +300,7 @@ switch (Tecla1){
 		if(t_objeto==ARTICULADO){
 			tanque.giro_torreta+=5;
 		}
-		else if(t_objeto==CERDITO){
+		else{
 			/**INICIO ANIMACION**/
 			if(seMueve == 0) seMueve = 1;
 			else seMueve = 0;
