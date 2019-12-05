@@ -54,6 +54,40 @@ _triangulos3D::_triangulos3D()
  especular._1 = 0.5;
  especular._2 = 0.5;
  brillo = 1;
+ material = 1;
+}
+
+//**************************************************************************
+// cambiar el material
+//***************************************************************************
+void _triangulos3D::cambiarMaterial(){
+  material++;
+  if(material == 4) material = 1;
+
+  if(material == 1){
+    ambiente_difusa._0 = 1;
+    ambiente_difusa._1 = 0.4;
+    ambiente_difusa._2 = 0.3;
+    especular._0 = 0.5;
+    especular._1 = 0.5;
+    especular._2 = 0.5;
+  }
+  else if(material == 2){
+    ambiente_difusa._0 = 0.372594;
+    ambiente_difusa._1 = 0.623529;
+    ambiente_difusa._2 = 0.623529;
+    especular._0 = 0.172594;
+    especular._1 = 0.923529;
+    especular._2 = 0.923529;
+  }
+  else if(material == 3){
+    ambiente_difusa._0 = 0.43;
+    ambiente_difusa._1 = 0.85;
+    ambiente_difusa._2 = 0.57;
+    especular._0 = 0.7;
+    especular._1 = 1;
+    especular._2 = 0.9;
+  }
 
 }
 
@@ -192,8 +226,8 @@ switch (modo){
 	case EDGES:draw_aristas(r1, g1, b1, grosor);break;
 	case SOLID_CHESS:draw_solido_ajedrez(r1, g1, b1, r2, g2, b2);break;
 	case SOLID:draw_solido(r1, g1, b1);break;
-	case SOLID_ILLUMINATED_FLAT:draw_iluminacion_plana();
-	case SOLID_ILLUMINATED_GOURAUD:draw_iluminacion_suave();
+	case SOLID_ILLUMINATED_FLAT:draw_iluminacion_plana();break;
+	case SOLID_ILLUMINATED_GOURAUD:draw_iluminacion_suave();break;
 	}
 }
 

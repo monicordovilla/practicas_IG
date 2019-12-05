@@ -178,6 +178,7 @@ glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
 glPopMatrix();
 }
 
+
 //**************************************************************************
 //
 //***************************************************************************
@@ -234,6 +235,17 @@ switch (toupper(Tecla1)){
 	case '4':modo=SOLID_CHESS;break;
 	case '5':modo=SOLID_ILLUMINATED_FLAT;break;
 	case '6':modo=SOLID_ILLUMINATED_GOURAUD;break;
+	case '7':
+		switch (t_objeto){
+			case PIRAMIDE: piramide.cambiarMaterial();
+			case CUBO: cubo.cambiarMaterial();
+			case OBJETO_PLY: ply.cambiarMaterial();
+			case ARTICULADO: tanque.cambiarMaterial();
+			case ROTACION: rotacion.cambiarMaterial();
+			case CERDITO: cerdito.cambiarMaterial();
+			case ESFERA: esfera.cambiarMaterial();
+		}
+		break;
 	case 'P':t_objeto=PIRAMIDE;break;
 	case 'C':t_objeto=CUBO;break;
 	case 'O':t_objeto=OBJETO_PLY;break;

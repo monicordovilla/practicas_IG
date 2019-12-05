@@ -12,7 +12,7 @@ using namespace std;
 
 const float AXIS_SIZE=5000;
 typedef enum{POINTS,EDGES,SOLID_CHESS,SOLID,SOLID_ILLUMINATED_FLAT,
-             SOLID_ILLUMINATED_GOURAUD} _modo;
+             SOLID_ILLUMINATED_GOURAUD,MATERIAL} _modo;
 
 //*************************************************************************
 // clase punto
@@ -61,6 +61,8 @@ _vertex4f ambiente_difusa;     //coeficientes ambiente y difuso
 _vertex4f especular;           //coeficiente especular
 float brillo;                  //exponente del brillo
 
+int material; //numero de material que esta visualizandose
+void cambiarMaterial();
 };
 
 
