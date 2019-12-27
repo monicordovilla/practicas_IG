@@ -6,7 +6,8 @@
 #include <GL/gl.h>
 #include "vertex.h"
 #include <stdlib.h>
-#include "objetos_B3.h"
+#include "objetos_B5.h"
+
 
 using namespace std;
 
