@@ -1,5 +1,5 @@
 //**************************************************************************
-// Práctica 3 usando objetos
+// Práctica 5 usando objetos
 //**************************************************************************
 
 #include "stdlib.h"
@@ -48,7 +48,7 @@ int estadoRaton[3], xc, yc, mode[5], cambio=0;
 solido *piramide1, *piramide2, *piramide3, *piramide4, *piramide5;
 
 int Ancho=450, Alto=450, tipo_camara=0;
-float factor=1.2;
+float factor=2.0;
 
 void pick_color(int x, int y);
 
@@ -150,12 +150,25 @@ switch (t_objeto){
 
 void draw(void)
 {
+	clean_window();
+	/*clean_window();
+	change_observer();
+	draw_axis();
+	draw_objects();
+	glutSwapBuffers();*/
 
-clean_window();
-change_observer();
-draw_axis();
-draw_objects();
-glutSwapBuffers();
+	if(tipo_camara == 0){
+		change_observer();
+	}
+	else if(tipo_camara ==1){
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		gluLookAt(4,1,4, -1,0,0, 0.1,-1,0);
+
+	}
+	draw_axis();
+	draw_objects();
+	glutSwapBuffers();
 }
 
 
