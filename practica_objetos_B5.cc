@@ -136,9 +136,8 @@ void draw_objects()
 switch (t_objeto){
 	case CUBO: cubo.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
 	case PIRAMIDE: piramide.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
-        case OBJETO_PLY: ply.draw(modo,1.0,0.6,0.0,0.0,1.0,0.3,2);break;
-        case ROTACION: rotacion.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
-        case ARTICULADO: tanque.draw(modo,0.5,0.7,0.2,0.3,0.6,0.3,2);break;
+	case OBJETO_PLY: ply.draw(modo,1.0,0.6,0.0,0.0,1.0,0.3,2);break;
+	case ROTACION: rotacion.draw(modo,1.0,0.0,0.0,0.0,1.0,0.0,2);break;
 	case CERDITO: cerdito.draw(modo, 0.737255,0.560784,0.737255, 1.0,0.0,1.0, 2);break;
 	}
 
@@ -198,6 +197,8 @@ switch (toupper(Tecla1)){
 	case '2':modo=EDGES;break;
 	case '3':modo=SOLID;break;
 	case '4':modo=SOLID_CHESS;break;
+	case '5':tipo_camara=0;break;
+	case '6':tipo_camara=1;break;
 	case 'P':t_objeto=PIRAMIDE;break;
 	case 'C':t_objeto=CUBO;break;
 	case 'O':t_objeto=OBJETO_PLY;break;

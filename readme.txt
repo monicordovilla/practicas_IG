@@ -3,6 +3,8 @@ acciones de las teclas
 2 - modo aristas
 3 - relleno solido
 4 - relleno ajedrez
+5 - camara normal
+6 - camara ortogonal
 
 P - piramide cuadrangular
 C - cubo
