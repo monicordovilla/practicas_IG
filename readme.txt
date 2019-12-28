@@ -11,7 +11,9 @@ C - cubo
 O - busto Beethoven
 R - peon
 A - tanque profesor
-G - cerdito (objeto creado por mi)
+G - cerdito (objeto creado por mi
+M - zoom para alejar objeto
+N - zoom para acercar objeto
 
 flecha derecha - girar camara derecha
 flecha izquierda - girar camara izquierda
@@ -31,5 +33,5 @@ F5 - mueve la cabeza hacia abajo el cerdito
 acciones del raton:
 tecla izquierda - selecion color
 tecla derecha y mover el raton - mover imagen
-tecla derecha y rueda hacia arriba - acercar
-tecla derecha y rueda hacia abajo - alejar
+rueda hacia arriba - zoom para acercar
+rueda hacia abajo - zoom para alejar

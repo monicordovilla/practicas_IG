@@ -48,7 +48,7 @@ int estadoRaton[3], xc, yc, mode[5], cambio=0;
 solido *piramide1, *piramide2, *piramide3, *piramide4, *piramide5;
 
 int Ancho=450, Alto=450, tipo_camara=0;
-float factor=2.0;
+float factor=1.0;
 
 void pick_color(int x, int y);
 
@@ -80,7 +80,6 @@ if(tipo_camara == 0){
 }
 else if(tipo_camara == 1){
 	glOrtho(-2,2,-2,2,-100,100);
-  glScalef(factor,factor,1);
 }
 
 }
@@ -94,6 +93,7 @@ void change_observer()
 
 // posicion del observador
 glMatrixMode(GL_MODELVIEW);
+glRotatef(0,factor,0,0);
 glLoadIdentity();
 glTranslatef(0,0,-Observer_distance);
 glRotatef(Observer_angle_x,1,0,0);
@@ -164,7 +164,7 @@ void draw(void)
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		gluLookAt(4,1,4, -1,0,0, 0.1,-1,0);
-
+		glScalef(factor,factor,factor);
 	}
 	draw_axis();
 	draw_objects();
@@ -218,8 +218,14 @@ switch (toupper(Tecla1)){
 	case 'R':t_objeto=ROTACION;break;
 	case 'A':t_objeto=ARTICULADO;break;
 	case 'G':t_objeto=CERDITO;break;
-	case '+':factor*=0.9; break;
-	case '-':factor*=1.1; break;
+	case 'N':
+		if(tipo_camara==1)factor*=0.9;
+		if(tipo_camara==0)Observer_distance*=0.9;
+		break;
+	case 'M':
+		if(tipo_camara==1)factor*=1.1;
+		if(tipo_camara==0)Observer_distance*=1.1;
+		break;
 	}
 glutPostRedisplay();
 }
@@ -372,12 +378,14 @@ if(boton== GLUT_LEFT_BUTTON) {
     }
   }
 	if(boton== 3) { //SCROLL UP
-			printf("SCROLL Up At %d %d\n", x, y);
 			Observer_distance/=1.2;
+			factor/=1.2;
+			glutPostRedisplay();
 	 }
 	if(boton== 4) { //SCROLL DOWN
-			printf("SCROLL Down At %d %d\n", x, y);
 			Observer_distance*=1.2;
+			factor*=1.2;
+			glutPostRedisplay();
 	}
 }
 
