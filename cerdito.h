@@ -72,7 +72,7 @@ public:
 	_oreja(); //alto 1 radio 0.5
 	void 	draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
 
-protected:
+
 _piramide piramide;
 };
 
@@ -100,7 +100,7 @@ void 	draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b
 
 float radio;
 
-protected:
+ 
 _esfera  esfera;
 _oreja orejaDer;
 _oreja orejaIzq;
@@ -127,7 +127,6 @@ _pata  pataSupDer;
 _pata  pataSupIzq;
 _pata  pataInfDer;
 _pata  pataInfIzq;
-protected:
 _abdomen  abdomen;
 };
 
@@ -155,11 +154,9 @@ bool saltando;
 float giro_saludo;
 bool saludo;
 
-
        _cerdito();
 void 	draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
 
-protected:
 _cuerpo cuerpo;
 _cara cara;
 };

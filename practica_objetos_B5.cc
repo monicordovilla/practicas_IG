@@ -43,7 +43,7 @@ _tanque tanque;
 _cerdito cerdito;
 
 // _objeto_ply *ply1;
-int estadoRaton[3], xc, yc, mode[5], cambio=0;
+int estadoRaton[3], xc, yc;
 
 solido *piramide1, *piramide2, *piramide3, *piramide4, *piramide5;
 
@@ -428,76 +428,23 @@ if(estadoRaton[2]==1)
 //************************************************************************
 
 
-void procesar_color(unsigned char color[3])
+void procesar_color(GLint hits, GLuint *names)
 {
- int i;
- solido *obj;
+	std::cout << "HIIIIIEEEAATS " << hits << '\n';
+	if(hits<=0) return;
+	unsigned num= names[3];
+	std::cout << "num "<< num << '\n';
 
- obj=(solido *)malloc(sizeof(solido));
-
- switch (color[0])
-      {case 100: obj=piramide1;
-                 if (mode[0]==0)
-                      {mode[0]=1;
-                       cambio=1;
-                      }
-                  else
-                      {mode[0]=0;
-                       cambio=0;
-                      }
-                  break;
-        case 120: obj=piramide2;
-                  if (mode[1]==0)
-                       {mode[1]=1;
-                        cambio=1;
-                       }
-                  else
-                       {mode[1]=0;
-                        cambio=0;
-                       }
-                  break;
-        case 140: obj=piramide3;
-                  if (mode[2]==0)
-                       {mode[2]=1;
-                        cambio=1;
-                       }
-                  else
-                       {mode[2]=0;
-                        cambio=0;
-                       }
-                  break;
-        case 160: obj=piramide4;
-                  if (mode[3]==0)
-                       {mode[3]=1;
-                        cambio=1;
-                       }
-                  else
-                       {mode[3]=0;
-                        cambio=0;
-                       }
-                  break;
-        case 180: obj=piramide5;
-                  if (mode[4]==0)
-                       {mode[4]=1;
-                        cambio=1;
-                       }
-                  else
-                       {mode[4]=0;
-                        cambio=0;
-                       }
-                  break;
-                }
-
-        if (cambio==1)
-                  {obj->r=0.3;
-                   obj->g=0.9;
-                   obj->b=0.3;
-                  }
-        if (cambio==0)
-                  {obj->r=0.9;
-                   obj->g=0.6;
-                   obj->b=0.2;
-                  }
+	if ( t_objeto==CERDITO){
+		switch (num){
+			case 7: cerdito.cara.nariz.coloreado; cout << "Selec" << endl; break;
+			case 1: cerdito.cuerpo.abdomen.coloreado; cout << "Selec" << endl;break;
+			case 2: cerdito.cuerpo.pataSupDer.coloreado = !cerdito.cuerpo.pataSupDer.coloreado; cout << "Selec" << endl; break;
+			case 3: cerdito.cuerpo.pataSupIzq.coloreado; cout << "Selec" << endl; break;
+			case 4: cerdito.cuerpo.pataInfDer.coloreado; cout << "Selec" << endl; break;
+			case 5: cerdito.cuerpo.pataInfIzq.coloreado; cout << "Selec" << endl; break;
+			}
+	}
 
  }
 
@@ -505,16 +452,37 @@ void procesar_color(unsigned char color[3])
 
 void pick_color(int x, int y)
 {
-GLint viewport[4];
+GLuint selectBuf[100]={0}, *names;
+GLint viewport[4], hits=0;
 unsigned char pixel[3];
 
+glSelectBuffer(100, selectBuf);
 glGetIntegerv(GL_VIEWPORT, viewport);
-glReadBuffer(GL_BACK);
-glReadPixels(x,viewport[3]-y,1,1,GL_RGB,GL_UNSIGNED_BYTE,(GLubyte *) &pixel[0]);
-printf(" valor x %d, valor y %d, color %d, %d, %d \n",x,y,pixel[0],pixel[1],pixel[2]);
+//glReadBuffer(GL_BACK);
+//glReadPixels(x,viewport[3]-y,1,1,GL_RGB,GL_UNSIGNED_BYTE,(GLubyte *) &pixel[0]);
+//printf(" valor x %d, valor y %d, color %d, %d, %d \n",x,y,pixel[0],pixel[1],pixel[2]);
 
-procesar_color(pixel);
-glutPostRedisplay();
+
+// Pasar OpenGL a modo selección
+glRenderMode (GL_SELECT);
+glInitNames();
+glPushName(0);
+
+glMatrixMode (GL_PROJECTION);
+glLoadIdentity ();
+gluPickMatrix (x,(viewport[3] - y),10.0, 10.0, viewport);
+glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
+draw();
+
+hits = glRenderMode (GL_RENDER);
+glMatrixMode (GL_PROJECTION);
+glLoadIdentity ();
+glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
+
+procesar_color(hits, selectBuf);
+names = selectBuf;
+draw();
+//glutPostRedisplay();
 }
 
 //***************************************************************************
@@ -545,7 +513,6 @@ change_projection();
 glViewport(0,0,Window_width,Window_high);
 
 
-for (int i=0;i<5;i++) mode[i]=0;
 }
 
 

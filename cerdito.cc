@@ -52,7 +52,7 @@ for(j=0; j<num; j++)
 		caras.push_back(cara_aux);
 	}
 }
-     
+
  // tapa inferior
 if (fabs(perfil[0].x)>0.0) //Si el objeto de revolucion empieza fuera del eje
   {
@@ -69,7 +69,7 @@ if (fabs(perfil[0].x)>0.0) //Si el objeto de revolucion empieza fuera del eje
 		caras.push_back(cara_aux);
 	}
   }
- 
+
  // tapa superior
  if (fabs(perfil[num_aux-1].x)>0.0)
   {
@@ -128,7 +128,7 @@ float profundo = 1.0;
 
 	caras[10]._0=4;caras[10]._1=5;caras[10]._2=6;
 	caras[11]._0=4;caras[11]._1=6;caras[11]._2=7;
-} 
+}
 
 //*************************************************************************
 // Pata
@@ -145,6 +145,7 @@ float profundo = 1.0;
 
 void _pata::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor)
 {
+  if(coloreado) {r1 = 1; r2 = 1;}
 	glPushMatrix();
 	cilindro.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
@@ -228,7 +229,7 @@ for (j=0; j<perfiles; j++)
 // tratamiento de las caras
 for(j=0; j<perfiles; j++)
 {for (i=0;i<puntos-1; i++)
-     {	
+     {
 /**/
 		cara_aux._0=i + ((j+1)%perfiles)*puntos;
 		cara_aux._1=i + 1 + ((j+1)%perfiles)*puntos;
@@ -255,7 +256,7 @@ for(j=0; j<perfiles; j++)
 		cara_aux._2=((j+1)%puntos)*perfiles;
 		caras.push_back(cara_aux);
 	}
- 
+
  // tapa superior
 	vertice_aux.x=0.0;
 	vertice_aux.y=radio;
@@ -319,10 +320,12 @@ _cuerpo::_cuerpo(){
 void _cuerpo::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor, float giro, float saludo)
 {
 	glPushMatrix();
+    glLoadName(1);
 	abdomen.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
 
 	glPushMatrix();
+  glLoadName(4);
 	glTranslatef(anchuraC/3,-alturaC/2,0);
 	glRotatef(90.0+giro,0,0,1);
         glTranslatef(0,-alturaP/2,0);
@@ -330,6 +333,7 @@ void _cuerpo::draw(_modo modo, float r1, float g1, float b1, float r2, float g2,
 	glPopMatrix();
 
 	glPushMatrix();
+    glLoadName(5);
 	glTranslatef(-anchuraC/3,-alturaC/2,0);
 	glRotatef(-90.0-giro,0,0,1);
         glTranslatef(0,-alturaP/2,0);
@@ -337,6 +341,8 @@ void _cuerpo::draw(_modo modo, float r1, float g1, float b1, float r2, float g2,
 	glPopMatrix();
 
 	glPushMatrix();
+
+    glLoadName(2);
 	glTranslatef(anchuraC/3, (alturaC/2)-1 ,0);
 	glRotatef(90.0+giro+saludo,0,0,1);
         glTranslatef(0,-alturaP/2,0);
@@ -344,6 +350,8 @@ void _cuerpo::draw(_modo modo, float r1, float g1, float b1, float r2, float g2,
 	glPopMatrix();
 
 	glPushMatrix();
+
+    glLoadName(3);
 	glTranslatef(-anchuraC/3, (alturaC/2)-1 ,0);
 	glRotatef(-90.0-giro,0,0,1);
         glTranslatef(0,-alturaP/2,0);

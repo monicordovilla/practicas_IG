@@ -45,6 +45,7 @@ void 	draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b
 void 	draw_seleccion_color(solido *malla, _modo modo, float r, float g, float b);
 
 vector<_vertex3i> caras;
+bool coloreado;
 };
 
 
