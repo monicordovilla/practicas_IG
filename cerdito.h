@@ -31,6 +31,10 @@ class _abdomen: public _triangulos3D
 public:
 
 	_abdomen(); //alto 5 ancho 4 profundo 2
+	bool vector_init;
+	vector<bool> vec;
+
+	void draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor);
 };
 
 //*************************************************************************
@@ -100,7 +104,7 @@ void 	draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b
 
 float radio;
 
- 
+
 _esfera  esfera;
 _oreja orejaDer;
 _oreja orejaIzq;

@@ -79,7 +79,7 @@ if(tipo_camara == 0){
 	glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
 }
 else if(tipo_camara == 1){
-	glOrtho(-2,2,-2,2,-100,100);
+	glOrtho(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
 }
 
 }
@@ -163,7 +163,7 @@ void draw(void)
 	else if(tipo_camara ==1){
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		gluLookAt(4,1,4, -1,0,0, 0.1,-1,0);
+		gluLookAt(4,1,4, -1,0,0, 0.1,-1,0); //Posicion desde la que se observaría
 		glScalef(factor,factor,factor);
 	}
 	draw_axis();
@@ -378,14 +378,14 @@ if(boton== GLUT_LEFT_BUTTON) {
     }
   }
 	if(boton== 3) { //SCROLL UP
-			Observer_distance/=1.2;
-			factor/=1.2;
-			glutPostRedisplay();
+		if(tipo_camara==1)factor/=1.2;
+		if(tipo_camara==0)Observer_distance/=1.2;
+		glutPostRedisplay();
 	 }
 	if(boton== 4) { //SCROLL DOWN
-			Observer_distance*=1.2;
-			factor*=1.2;
-			glutPostRedisplay();
+		if(tipo_camara==1)factor*=1.2;
+		if(tipo_camara==0)Observer_distance*=1.2;
+		glutPostRedisplay();
 	}
 }
 
@@ -435,14 +435,31 @@ void procesar_color(GLint hits, GLuint *names)
 	unsigned num= names[3];
 	std::cout << "num "<< num << '\n';
 
+	// mostrar contenido de la pila
+	printf("%d hits:\n", hits);
+	for (int i = 0; i < hits; i++)
+		printf("Número: %d\n Min Z: %d\n Max Z: %d\n Nombre en la pila: %d\n",
+			(GLubyte)names[i * 4],
+			(GLubyte)names[i * 4 + 1],
+			(GLubyte)names[i * 4 + 2],
+			(GLubyte)names[i * 4 + 3]);
+	printf("\n");
+
+	//procesar el cambiode colo
 	if ( t_objeto==CERDITO){
 		switch (num){
-			case 7: cerdito.cara.nariz.coloreado; cout << "Selec" << endl; break;
-			case 1: cerdito.cuerpo.abdomen.coloreado; cout << "Selec" << endl;break;
+			//case 1: cerdito.cuerpo.abdomen.coloreado = !cerdito.cuerpo.abdomen.coloreado ;break;
 			case 2: cerdito.cuerpo.pataSupDer.coloreado = !cerdito.cuerpo.pataSupDer.coloreado; cout << "Selec" << endl; break;
-			case 3: cerdito.cuerpo.pataSupIzq.coloreado; cout << "Selec" << endl; break;
-			case 4: cerdito.cuerpo.pataInfDer.coloreado; cout << "Selec" << endl; break;
-			case 5: cerdito.cuerpo.pataInfIzq.coloreado; cout << "Selec" << endl; break;
+			case 3: cerdito.cuerpo.pataSupIzq.coloreado = !cerdito.cuerpo.pataSupIzq.coloreado;break;
+			case 4: cerdito.cuerpo.pataInfDer.coloreado = !cerdito.cuerpo.pataInfDer.coloreado;break;
+			case 5: cerdito.cuerpo.pataInfIzq.coloreado = !cerdito.cuerpo.pataInfIzq.coloreado;break;
+			case 6: cerdito.cara.esfera.coloreado = !cerdito.cara.esfera.coloreado;break;
+			case 7: cerdito.cara.orejaDer.coloreado = !cerdito.cara.orejaDer.coloreado;break;
+			case 8: cerdito.cara.orejaIzq.coloreado = !cerdito.cara.orejaIzq.coloreado;break;
+			case 9: cerdito.cara.nariz.coloreado = !cerdito.cara.nariz.coloreado;break;
+			}
+			if(num >= 50){
+				cerdito.cuerpo.abdomen.vec[num-50] = !cerdito.cuerpo.abdomen.vec[num-50];
 			}
 	}
 
@@ -450,17 +467,21 @@ void procesar_color(GLint hits, GLuint *names)
 
 
 
-void pick_color(int x, int y)
+void pick_color(int x, int y) //Modificado segun diapositivas prado
 {
-GLuint selectBuf[100]={0}, *names;
+GLuint selectBuf[100]={0};
 GLint viewport[4], hits=0;
 unsigned char pixel[3];
 
+// Declarar buffer de selección
 glSelectBuffer(100, selectBuf);
+// Obtener los parámetros del viewport
 glGetIntegerv(GL_VIEWPORT, viewport);
-//glReadBuffer(GL_BACK);
-//glReadPixels(x,viewport[3]-y,1,1,GL_RGB,GL_UNSIGNED_BYTE,(GLubyte *) &pixel[0]);
-//printf(" valor x %d, valor y %d, color %d, %d, %d \n",x,y,pixel[0],pixel[1],pixel[2]);
+
+//Obtener color seleccionado
+glReadBuffer(GL_BACK);
+glReadPixels(x,viewport[3]-y,1,1,GL_RGB,GL_UNSIGNED_BYTE,(GLubyte *) &pixel[0]);
+printf(" valor x %d, valor y %d, color %d, %d, %d \n",x,y,pixel[0],pixel[1],pixel[2]);
 
 
 // Pasar OpenGL a modo selección
@@ -468,21 +489,27 @@ glRenderMode (GL_SELECT);
 glInitNames();
 glPushName(0);
 
+//Fijar la transformación de proyección para la selección
 glMatrixMode (GL_PROJECTION);
 glLoadIdentity ();
 gluPickMatrix (x,(viewport[3] - y),10.0, 10.0, viewport);
 glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
-draw();
 
+// Dibujar la escena
+draw();
+// Pasar OpenGLa modo render
 hits = glRenderMode (GL_RENDER);
+
+// Restablecer la transformación de proyección
 glMatrixMode (GL_PROJECTION);
 glLoadIdentity ();
 glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
 
+// Restablecer la transformación de proyección
 procesar_color(hits, selectBuf);
-names = selectBuf;
+
+// Dibujar la escena para actualizar cambios
 draw();
-//glutPostRedisplay();
 }
 
 //***************************************************************************

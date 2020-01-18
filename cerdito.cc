@@ -128,6 +128,61 @@ float profundo = 1.0;
 
 	caras[10]._0=4;caras[10]._1=5;caras[10]._2=6;
 	caras[11]._0=4;caras[11]._1=6;caras[11]._2=7;
+
+
+/*for(int i=0;i<caras.size();i++){
+  glLoadName( 10 + i);
+  glBegin(GL_TRIANGLES);
+  glVertex3f();
+  glEnd();
+}*/
+
+  vector_init = true;
+  vec.resize(12);
+  for(int i=0 ; i<vec.size(); i++) vec[i]=false;
+}
+
+void _abdomen::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor)
+{
+  switch (modo){
+    case POINTS:draw_puntos(r1, g1, b1, grosor);break;
+    case EDGES:draw_aristas(r1, g1, b1, grosor);break;
+    default:
+      int i;
+      glLoadName(211);
+      glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+      glLoadName(212);
+
+      glPushMatrix();
+      glLoadName(213);
+
+      for (i=0;i<caras.size();i++){
+        int name = 50 +i;
+        glLoadName(name);
+
+        glBegin(GL_TRIANGLES);
+        printf("cara numero: %d\n", 50+i);
+
+      	if(vector_init && vec[i]){
+      		glColor3f(0,0.1,1);
+          glVertex3fv((GLfloat *) &vertices[caras[i]._0]);
+          glVertex3fv((GLfloat *) &vertices[caras[i]._1]);
+          glVertex3fv((GLfloat *) &vertices[caras[i]._2]);
+      	}
+        else{
+          glColor3f(1,0,1);
+          glVertex3fv((GLfloat *) &vertices[caras[i]._0]);
+          glVertex3fv((GLfloat *) &vertices[caras[i]._1]);
+          glVertex3fv((GLfloat *) &vertices[caras[i]._2]);
+        }
+
+
+        glEnd();
+      }
+      glPopMatrix();
+    break;
+  }
+
 }
 
 //*************************************************************************
@@ -145,7 +200,7 @@ float profundo = 1.0;
 
 void _pata::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor)
 {
-  if(coloreado) {r1 = 1; r2 = 1;}
+  if(coloreado) {r1 = 1; r2 = 0;}
 	glPushMatrix();
 	cilindro.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
@@ -167,6 +222,7 @@ _nariz::_nariz(){
 
 void _nariz::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor)
 {
+  if(coloreado) {r1 = 1; r2 = 0;}
 	glPushMatrix();
 	glRotatef(90.0,1,0,0);
 	cilindro.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
@@ -186,6 +242,7 @@ _oreja::_oreja(){
 
 void _oreja::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor)
 {
+  if(coloreado) {r1 = 1; r2 = 0;}
 	glPushMatrix();
 	piramide.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
@@ -283,22 +340,26 @@ _cara::_cara(){
 void _cara::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor)
 {
 	glPushMatrix();
+  glLoadName(6);
 	esfera.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
 
 	glPushMatrix();
+  glLoadName(9);
 	glTranslatef(0, -(radio/2) , radio-(0.25));
 	glRotatef(25.0,1,0,0);
 	nariz.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
 
 	glPushMatrix();
+  glLoadName(8);
 	glTranslatef( -radio/2, radio/2 , 0);
 	glRotatef(45.0,0,0,1);
 	orejaIzq.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
 
 	glPushMatrix();
+  glLoadName(7);
 	glTranslatef( radio/2 , radio/2 , 0);
 	glRotatef(-45.0,0,0,1);
 	orejaDer.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
@@ -320,20 +381,21 @@ _cuerpo::_cuerpo(){
 void _cuerpo::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor, float giro, float saludo)
 {
 	glPushMatrix();
-    glLoadName(1);
+  //glPushName(1);
 	abdomen.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
+  //glPopName();
 	glPopMatrix();
 
 	glPushMatrix();
   glLoadName(4);
 	glTranslatef(anchuraC/3,-alturaC/2,0);
 	glRotatef(90.0+giro,0,0,1);
-        glTranslatef(0,-alturaP/2,0);
+  glTranslatef(0,-alturaP/2,0);
 	pataInfDer.draw(modo, r1, g1, b1, r2, g2, b2, grosor);
 	glPopMatrix();
 
 	glPushMatrix();
-    glLoadName(5);
+  glLoadName(5);
 	glTranslatef(-anchuraC/3,-alturaC/2,0);
 	glRotatef(-90.0-giro,0,0,1);
         glTranslatef(0,-alturaP/2,0);
@@ -341,8 +403,7 @@ void _cuerpo::draw(_modo modo, float r1, float g1, float b1, float r2, float g2,
 	glPopMatrix();
 
 	glPushMatrix();
-
-    glLoadName(2);
+  glLoadName(2);
 	glTranslatef(anchuraC/3, (alturaC/2)-1 ,0);
 	glRotatef(90.0+giro+saludo,0,0,1);
         glTranslatef(0,-alturaP/2,0);
@@ -378,6 +439,8 @@ _cerdito::_cerdito(){
 	salto_max = 25.0;
 	salto_min = 0.0;
 	saltando = true;
+
+
 }
 
 void _cerdito::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor)
