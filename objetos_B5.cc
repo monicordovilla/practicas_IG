@@ -98,13 +98,12 @@ glEnd();
 // dibujar en modo sólido con apariencia de ajedrez
 //*************************************************************************
 
-void _triangulos3D::draw_solido_ajedrez(float r1, float g1, float b1, float r2, float g2, float b2, int num=0)
+void _triangulos3D::draw_solido_ajedrez(float r1, float g1, float b1, float r2, float g2, float b2)
 {
 int i;
 glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
 glBegin(GL_TRIANGLES);
 for (i=0;i<caras.size();i++){
-	glLoadName(num + i);
 	if (i%2==0) glColor3f(r1,g1,b1);
 	else glColor3f(r2,g2,b2);
 	glVertex3fv((GLfloat *) &vertices[caras[i]._0]);

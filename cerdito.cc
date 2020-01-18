@@ -170,7 +170,7 @@ void _abdomen::draw(_modo modo, float r1, float g1, float b1, float r2, float g2
           glVertex3fv((GLfloat *) &vertices[caras[i]._2]);
       	}
         else{
-          glColor3f(1,0,1);
+          glColor3f(r1,g1,b1);
           glVertex3fv((GLfloat *) &vertices[caras[i]._0]);
           glVertex3fv((GLfloat *) &vertices[caras[i]._1]);
           glVertex3fv((GLfloat *) &vertices[caras[i]._2]);
