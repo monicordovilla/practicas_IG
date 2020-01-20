@@ -5,6 +5,7 @@ acciones de las teclas
 4 - relleno ajedrez
 5 - camara normal
 6 - camara ortogonal
+7 - vista alzada, perfil y planta
 
 P - piramide cuadrangular
 C - cubo

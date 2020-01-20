@@ -45,12 +45,12 @@ _cerdito cerdito;
 // _objeto_ply *ply1;
 int estadoRaton[3], xc, yc;
 
-solido *piramide1, *piramide2, *piramide3, *piramide4, *piramide5;
-
 int Ancho=450, Alto=450, tipo_camara=0;
 float factor=1.0;
 
 void pick_color(int x, int y);
+void draw_axis();
+void draw_objects();
 
 //**************************************************************************
 //
@@ -62,6 +62,99 @@ void clean_window()
 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
+//**************************************************************************
+// Funciones para definir la transformación de proyeccion perfil, alzado, planta
+//***************************************************************************
+
+void vista_alzado(){
+	//glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+	//Colocamos en la ventana
+	glViewport(0,Window_width/2, Window_width/2, Window_high/2);
+	/*glOrtho(-Size_x * Observer_distance, Size_x * Observer_distance,
+                -Size_y * Observer_distance, Size_y * Observer_distance,
+                Front_plane, Back_plane);*/
+	glOrtho(-Size_x * 2,Size_x * 2,-Size_y * 2,Size_y * 2,Front_plane,Back_plane);
+	//glOrtho(-3,3,-3,3,50,50);
+	//glScalef(factor,factor,1);
+
+	//Definir posicion desde la que vamos a ver la figura
+	glMatrixMode(GL_MODELVIEW);
+	//glLoadIdentity();
+	glPushMatrix();
+  glRotatef(-Observer_angle_y, 0, 1, 0);
+  glRotatef(-Observer_angle_x, 1, 0, 0);
+	glRotatef(Observer_angle_y, 0, 1, 0);
+	/*glTranslatef(0,0,-Observer_distance); // Hace el zoom
+  glRotatef(Observer_angle_x,1,0,0);
+  glRotatef(Observer_angle_y,0,1,0);*/
+	draw_axis();
+	draw_objects();
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+}
+
+void vista_planta(){
+	//glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+	//Colocamos en la ventana
+	glViewport(0,0, Window_width/2, Window_high/2);
+	//Modificar luego
+	glOrtho(-Size_x * Observer_distance, Size_x * Observer_distance,
+                -Size_y * Observer_distance, Size_y * Observer_distance,
+                Front_plane, Back_plane);
+	//glOrtho(-Size_x /3,Size_x /3,-Size_y /3,Size_y /3,Front_plane,Back_plane);
+	glPushMatrix();
+	glRotatef(-90,1,0,0);  // para verlo desde arriba
+  //glScalef(factor,1.0,factor);
+	glPopMatrix();
+
+	//Definir posicion desde la que vamos a ver la figura
+	glMatrixMode(GL_MODELVIEW);
+	//glLoadIdentity();
+	glPushMatrix();
+  glRotatef(-Observer_angle_y, 0, 1, 0);
+  glRotatef(-Observer_angle_x + 90, 1, 0, 0);
+	glRotatef(Observer_angle_y, 0, 1, 0);
+	/*glTranslatef(0,-Observer_distance,0); // Hace el zoom
+  glRotatef(Observer_angle_x,1,0,0);
+  glRotatef(Observer_angle_y,0,1,0);*/
+	draw_axis();
+	draw_objects();
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+}
+
+void vista_perfil(){
+	//glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+	//Colocamos en la ventana
+	glViewport(Window_width/2, Window_high/2, Window_width/2, Window_high/2);
+	/*glOrtho(-Size_x * Observer_distance, Size_x * Observer_distance,
+                -Size_y * Observer_distance, Size_y * Observer_distance,
+                Front_plane, Back_plane);*/
+	glOrtho(-Size_x * 2,Size_x * 2,-Size_y * 2,Size_y * 2,Front_plane,Back_plane);
+	//glOrtho(-3,3,-3,3,50,50);
+	glPushMatrix();
+	glRotatef(90,0,1,0);
+  //glScalef(1.0,factor,factor);
+	glPopMatrix();
+
+	//Definir posicion desde la que vamos a ver la figura
+	glMatrixMode(GL_MODELVIEW);
+	//glLoadIdentity();
+	glPushMatrix();
+  glRotatef(-Observer_angle_y, 0, 1, 0);
+  glRotatef(-Observer_angle_x, 1, 0, 0);
+	glRotatef(Observer_angle_y + 90, 0, 1, 0);
+	/*glTranslatef(-Observer_distance,0,0); // Hace el zoom
+  glRotatef(Observer_angle_x,1,0,0);
+  glRotatef(Observer_angle_y,0,1,0);*/
+	draw_axis();
+	draw_objects();
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+}
 
 //**************************************************************************
 // Funcion para definir la transformación de proyeccion
@@ -69,21 +162,31 @@ glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 void change_projection()
 {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
 
-glMatrixMode(GL_PROJECTION);
-glLoadIdentity();
+	// formato(x_minimo,x_maximo, y_minimo, y_maximo,plano_delantero, plano_traser)
+	//  plano_delantero>0  plano_trasero>PlanoDelantero)
+	if(tipo_camara == 0){
+		glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
+	}
+	else if(tipo_camara == 1){
+		glOrtho(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
+	}
+	else if(tipo_camara == 2){
+		vista_planta();
+		//draw_axis();
+	  //draw_objects();
 
-// formato(x_minimo,x_maximo, y_minimo, y_maximo,plano_delantero, plano_traser)
-//  plano_delantero>0  plano_trasero>PlanoDelantero)
-if(tipo_camara == 0){
-	glFrustum(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
+		vista_alzado();
+		//draw_axis();
+	  //draw_objects();
+
+		vista_perfil();
+		//draw_axis();
+	  //draw_objects();
+	}
 }
-else if(tipo_camara == 1){
-	glOrtho(-Size_x,Size_x,-Size_y,Size_y,Front_plane,Back_plane);
-}
-
-}
-
 //**************************************************************************
 // Funcion para definir la transformación*ply1 de vista (posicionar la camara)
 //***************************************************************************
@@ -98,6 +201,8 @@ glLoadIdentity();
 glTranslatef(0,0,-Observer_distance);
 glRotatef(Observer_angle_x,1,0,0);
 glRotatef(Observer_angle_y,0,1,0);
+
+//change_projection();
 }
 
 //**************************************************************************
@@ -158,16 +263,41 @@ void draw(void)
 	glutSwapBuffers();*/
 
 	if(tipo_camara == 0){
+    glViewport(0, 0, Window_width, Window_high);
 		change_observer();
+		draw_axis();
+		draw_objects();
+		//glMatrixMode(GL_PROJECTION);
 	}
 	else if(tipo_camara ==1){
+		glLoadIdentity();
+    glViewport(0, 0, Window_width, Window_high);
+    glOrtho(-Size_x * Observer_distance, Size_x * Observer_distance,
+                -Size_y * Observer_distance, Size_y * Observer_distance,
+                Front_plane, Back_plane);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		gluLookAt(4,1,4, -1,0,0, 0.1,-1,0); //Posicion desde la que se observaría
+		gluLookAt(4,1,4, -1,0,0, 0.1,1,0); //Posicion desde la que se observaría
 		glScalef(factor,factor,factor);
+		draw_axis();
+		draw_objects();
 	}
-	draw_axis();
-	draw_objects();
+	else if(tipo_camara == 2){
+		change_observer();
+		vista_planta();
+		draw_axis();
+	  draw_objects();
+
+		vista_alzado();
+		draw_axis();
+	  draw_objects();
+
+		vista_perfil();
+		draw_axis();
+	  draw_objects();
+		glMatrixMode(GL_MODELVIEW);
+	}
+	//glFlush();
 	glutSwapBuffers();
 }
 
@@ -210,7 +340,9 @@ switch (toupper(Tecla1)){
 	case '2':modo=EDGES;break;
 	case '3':modo=SOLID;break;
 	case '4':modo=SOLID_CHESS;break;
-	case '5':(tipo_camara++)%2;break;
+	case '5':tipo_camara=0;break;
+	case '6':tipo_camara=1;break;
+	case '7':tipo_camara=2;break;
 	case 'P':t_objeto=PIRAMIDE;break;
 	case 'C':t_objeto=CUBO;break;
 	case 'O':t_objeto=OBJETO_PLY;break;
@@ -360,31 +492,33 @@ void automatico()
 
 void clickRaton( int boton, int estado, int x, int y )
 {
-if(boton== GLUT_RIGHT_BUTTON) {
-   if( estado == GLUT_DOWN) {
-      estadoRaton[2] = 1;
-      xc=x;
-      yc=y;
-     }
-   else estadoRaton[2] = 1;
-   }
-if(boton== GLUT_LEFT_BUTTON) {
-  if( estado == GLUT_DOWN) {
-      estadoRaton[2] = 2;
-      xc=x;
-      yc=y;
-      pick_color(xc, yc);
-    }
-  }
-	if(boton== 3) { //SCROLL UP
-		if(tipo_camara==1)factor/=1.2;
-		if(tipo_camara==0)Observer_distance/=1.2;
-		glutPostRedisplay();
-	 }
-	if(boton== 4) { //SCROLL DOWN
-		if(tipo_camara==1)factor*=1.2;
-		if(tipo_camara==0)Observer_distance*=1.2;
-		glutPostRedisplay();
+	if(tipo_camara != 2 ){
+	if(boton== GLUT_RIGHT_BUTTON) {
+	   if( estado == GLUT_DOWN) {
+	      estadoRaton[2] = 1;
+	      xc=x;
+	      yc=y;
+	     }
+	   else estadoRaton[2] = 1;
+	   }
+	if(boton== GLUT_LEFT_BUTTON) {
+	  if( estado == GLUT_DOWN) {
+	      estadoRaton[2] = 2;
+	      xc=x;
+	      yc=y;
+	      pick_color(xc, yc);
+	    }
+	  }
+		if(boton== 3) { //SCROLL UP
+			if(tipo_camara==1)factor/=1.2;
+			if(tipo_camara==0)Observer_distance/=1.2;
+			glutPostRedisplay();
+		 }
+		if(boton== 4) { //SCROLL DOWN
+			if(tipo_camara==1)factor*=1.2;
+			if(tipo_camara==0)Observer_distance*=1.2;
+			glutPostRedisplay();
+		}
 	}
 }
 
@@ -429,7 +563,7 @@ if(estadoRaton[2]==1)
 
 void procesar_color(GLint hits, GLuint *names)
 {
-	std::cout << "HIIIIIEEEAATS " << hits << '\n';
+	//std::cout << "HIIIIIEEEAATS " << hits << '\n';
 	if(hits<=0) return;
 	unsigned num= names[3];
 	std::cout << "num "<< num << '\n';
@@ -452,10 +586,10 @@ void procesar_color(GLint hits, GLuint *names)
 			case 3: cerdito.cuerpo.pataSupIzq.coloreado = !cerdito.cuerpo.pataSupIzq.coloreado;break;
 			case 4: cerdito.cuerpo.pataInfDer.coloreado = !cerdito.cuerpo.pataInfDer.coloreado;break;
 			case 5: cerdito.cuerpo.pataInfIzq.coloreado = !cerdito.cuerpo.pataInfIzq.coloreado;break;
-			case 6: cerdito.cara.esfera.coloreado = !cerdito.cara.esfera.coloreado;break;
+			//case 6: cerdito.cara.esfera.coloreado = !cerdito.cara.esfera.coloreado;break;
 			case 7: cerdito.cara.orejaDer.coloreado = !cerdito.cara.orejaDer.coloreado;break;
 			case 8: cerdito.cara.orejaIzq.coloreado = !cerdito.cara.orejaIzq.coloreado;break;
-			case 9: cerdito.cara.nariz.coloreado = !cerdito.cara.nariz.coloreado;break;
+			//case 9: cerdito.cara.nariz.coloreado = !cerdito.cara.nariz.coloreado;break;
 			}
 			if(num >= 50){
 				cerdito.cuerpo.abdomen.vec[num-50] = !cerdito.cuerpo.abdomen.vec[num-50];

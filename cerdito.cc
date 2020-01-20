@@ -139,7 +139,9 @@ float profundo = 1.0;
 
   vector_init = true;
   vec.resize(12);
-  for(int i=0 ; i<vec.size(); i++) vec[i]=false;
+  for(int i=0 ; i<vec.size(); i++){
+    vec[i]=false;
+  }
 }
 
 void _abdomen::draw(_modo modo, float r1, float g1, float b1, float r2, float g2, float b2, float grosor)
@@ -149,20 +151,16 @@ void _abdomen::draw(_modo modo, float r1, float g1, float b1, float r2, float g2
     case EDGES:draw_aristas(r1, g1, b1, grosor);break;
     default:
       int i;
-      glLoadName(211);
       glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-      glLoadName(212);
 
       glPushMatrix();
-      glLoadName(213);
 
       for (i=0;i<caras.size();i++){
         int name = 50 +i;
         glLoadName(name);
 
         glBegin(GL_TRIANGLES);
-        printf("cara numero: %d\n", 50+i);
-
+        //std::cout << "vector[i] "<< vec[i] << '\n';
       	if(vector_init && vec[i]){
       		glColor3f(0,0.1,1);
           glVertex3fv((GLfloat *) &vertices[caras[i]._0]);
